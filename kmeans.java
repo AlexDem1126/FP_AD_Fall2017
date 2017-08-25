@@ -12,4 +12,9 @@ public class kmeans {
 		numOfDimension = numOfDimensionMF;
 	}
 
+	public void dataClustering(int nClusters, int nIterations, double[][] iniCentroids) {
+		
+		
+	}
+
 }
