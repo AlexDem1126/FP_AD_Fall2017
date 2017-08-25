@@ -4,14 +4,23 @@ public class myMain {
 
 	public static void main(String[] args) {
 
-		if (args.length > 0) {															
+		if (args.length > 0 && args.length < 6) {															
 			try {
-				String F = args[0];
-				System.out.println("F=" + F); // F is a file name
+				String F = args[0]; 					// F is a file name
+				int K = Integer.parseInt(args[1]); 		// K is a number of clusters
+				int I = Integer.parseInt(args[2]); 		// I is a max number of iterations in any run
+				double T = Double.parseDouble(args[3]); // T is a convergence threshold
+				int R = Integer.parseInt(args[4]); 		// R is a number of runs
 
-				manageFile_A objMF = new manageFile_A(F);
-			
+				System.out.println("F=" + F + " K=" + K + " I=" + I + " T=" + T + " R=" + R);				
+
+				manageFile_A objMF = new manageFile_A(F);			
 //				objMF.printFile(objMF.getDataset());
+				
+				kmeans objKmeans = new kmeans(objMF.getDataset(), objMF.getNumOfPoints(), objMF.getNumOfDimension());
+				
+				//phase1 objPhase1 = new phase1(objMF.getDataset(), objMF.getNumOfPoints0(), objMF.getNumOfDimension0());
+				
 				
 			} catch (NumberFormatException e) {
 				System.out.println(
