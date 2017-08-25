@@ -19,7 +19,20 @@ public class myMain {
 				
 				kmeans objKmeans = new kmeans(objMF.getDataset(), objMF.getNumOfPoints(), objMF.getNumOfDimension());
 				
-				//phase1 objPhase1 = new phase1(objMF.getDataset(), objMF.getNumOfPoints0(), objMF.getNumOfDimension0());
+				
+				
+				//******************************************************************
+				/*********** Kmeans ***********/
+				//******************************************************************
+				int count = 0;
+				System.out.println("***** Kmeans *****");
+				while (R > 0) {
+					System.out.println("\nRun " + (count + 1) + "\n============================");
+					objKmeans.dataClustering(K, I, null); //cluster, iteration, centroid
+					R--;
+					count++;
+				}
+
 				
 				
 			} catch (NumberFormatException e) {
