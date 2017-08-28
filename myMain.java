@@ -28,7 +28,7 @@ public class myMain {
 				System.out.println("***** Kmeans *****");
 				while (R > 0) {
 					System.out.println("\nRun " + (count + 1) + "\n============================");
-					objKmeans.dataClustering(K, I, null); //cluster, iteration, centroid
+					objKmeans.kMeanClustering(K, I, null); //cluster, iteration, centroid
 					R--;
 					count++;
 				}
