@@ -12,10 +12,13 @@ public class myMain {
 				double T = Double.parseDouble(args[3]); // T is a convergence threshold
 				int R = Integer.parseInt(args[4]); 		// R is a number of runs
 
-				System.out.println("F=" + F + " K=" + K + " I=" + I + " T=" + T + " R=" + R);				
-
+				System.out.println("F=" + F + " K=" + K + " I=" + I + " T=" + T + " R=" + R);	
+				
+				//get data from the file
 				manageFile_A objMF = new manageFile_A(F);			
 //				objMF.printFile(objMF.getDataset());
+				
+
 				
 				kmeans objKmeans = new kmeans(objMF.getDataset(), objMF.getNumOfPoints(), objMF.getNumOfDimension());
 				
@@ -28,7 +31,7 @@ public class myMain {
 				System.out.println("***** Kmeans *****");
 				while (R > 0) {
 					System.out.println("\nRun " + (count + 1) + "\n============================");
-					objKmeans.kMeanClustering(K, I, null); //cluster, iteration, centroid
+					objKmeans.kMeanClustering(K, I, T, null); //cluster, iteration, threshold, centroid
 					R--;
 					count++;
 				}
