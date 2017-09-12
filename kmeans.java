@@ -83,27 +83,12 @@ public class kmeans {
 				
 				if(SSE==newSSE){
 					System.out.println("Iteration " + iterationConverges + ": " + SSE);
-					System.out.println("Final SSE: " + SSE);						
-//					writeSSEtoFile(iterationConverges, SSE);
-					
-//					int clusterCount = 0;
-//					while(clusterCount<numOfClusters){
-//						int k = 0;
-//						System.out.println("Cluster # "+ clusterCount);
-//						for (int i = 0; i < sizeOfCluster[k]; i++) {
-//							for (int j = 0; j < numOfDimension; j++) {
-//								System.out.print(clusteredDataset[i][j] + " ");
-//							}
-//							System.out.println();
-//						}
-//						clusterCount++;
-//						k++;
-//					}
+					System.out.println("Final SSE: " + SSE);
 					break;
 				}else{
 					System.out.println("Iteration " + iterationConverges + ": " + newSSE);
-					//
-					
+					//display updatedCentroids
+					displayUpdatedCentroids(updatedCentroids);					
 				}			
 				if ((newSSE < threshold) || ((nIterations > 0) && (iterationConverges >= nIterations))) {
 					break;
@@ -112,7 +97,7 @@ public class kmeans {
 		System.out.println("Converges at iteration " + iterationConverges + "\n");			
 	}
 
-	
+
 
 	// 1. generate pseudo random centroids
 	private double[][] generateCentroids() {
@@ -137,7 +122,7 @@ public class kmeans {
 			}
 //			System.out.println();
 		}
-		System.out.println("Centroids: " + centrdData);
+		System.out.println("Random Centroids: " + centrdData);
 		return centroids;
 	}
 	
@@ -213,14 +198,14 @@ public class kmeans {
 		private double[][] updateClusterCentroid() {
 			int[] sizeOfCluster = new int[numOfClusters];
 			double[][] newCentroids = new double[numOfClusters][];	
-			double[][] newCentroidsB = new double[numOfClusters][];
+			double[][] newCentroidsB01 = new double[numOfClusters][];
 
 			for (int i = 0; i < numOfClusters; i++) {				
 				newCentroids[i] = new double[numOfDimension];
-				newCentroidsB[i] = new double[numOfDimension];
+				newCentroidsB01[i] = new double[numOfDimension];
 				for (int j = 0; j < numOfDimension; j++) {
 					newCentroids[i][j] = 0;
-					newCentroidsB[i][j] = 0;
+					newCentroidsB01[i][j] = 0;
 				}				
 				sizeOfCluster[i] = 0; // set to 0
 			}
@@ -252,15 +237,17 @@ public class kmeans {
 			for (int i = 0; i < numOfClusters; i++) {
 				for (int j = 0; j < numOfDimension; j++) {
 					if(newCentroids[i][j] < Attributes_Average[i]){
-						newCentroidsB[i][j] = 0; 
+//						newCentroidsB01[i][j] = 0; 
+						newCentroids[i][j] = 0; 
 					}
 					else {
-						newCentroidsB[i][j] = 1; 
+//						newCentroidsB01[i][j] = 1;
+						newCentroids[i][j] = 1; 
 					}					
 				}				
 			}		
-						
-			return newCentroidsB;
+//			return newCentroidsB01;			
+			return newCentroids;
 		}
 		
 
@@ -274,6 +261,19 @@ public class kmeans {
 				sse += distance ( dataset[i], center_new[cluster] );
 			}
 			return sse;
+		}
+		
+		
+		
+		//display updatedCentroids
+		private void displayUpdatedCentroids(double[][] updatedCentroidsF) {
+			System.out.println("Updated Centroids:");
+			for (int i = 0; i < numOfClusters; i++) {
+				for (int j = 0; j < numOfDimension; j++) {
+					System.out.print(updatedCentroidsF[i][j] +" ");//							
+				}
+				System.out.println();
+			}		
 		}
 
 
