@@ -11,6 +11,7 @@ public class kmeans {
 	private double[][] centroids;
 	private double threshold;
 	private int[] point;
+	private double[][] centroidsAttrAverage;
 	private double[] Attributes_Average;
 
 	
@@ -56,7 +57,7 @@ public class kmeans {
 		numOfClusters = nClusters;
 		threshold = iniThreshold;
 				
-		// 1. call method to generate pseudo random centroids
+		// 1. generate pseudo random centroids
 		centroids = generateCentroids(); 			//initial centroid
 		
 		double[][] updatedCentroids = centroids; 	//new initial centroid (updated)
@@ -69,26 +70,43 @@ public class kmeans {
 			
 			point = new int[numOfPoints];			
 			for (int i = 0; i < numOfPoints; i++) {
-				//2. call method to find points which are the nearest to a centroid
+				//2. find points which are the nearest to a centroid
 				point[i] = nearest(dataset[i]);
-			}			
+			}	
+			
+			//display Points of Dataset
+			displayUpdatedPoints(point);
+			
+			//count number of points in clusters
+			clustersSize(point);
 
-			//3. call method to update claster's centroid
+			//3. update claster's centroid
 			updatedCentroids = updateClusterCentroid();				
 		
 			//4. calculation of SSE improvement
 			double SSE = newSSE;				
+//			newSSE = findConverge(centroidsAttrAverage, threshold);
 			newSSE = findConverge(centroids, updatedCentroids, threshold);
 			iterationConverges++;	
 				
 				if(SSE==newSSE){
-					System.out.println("Iteration " + iterationConverges + ": " + SSE);
-					System.out.println("Final SSE: " + SSE);
+					System.out.println("\n\nIteration " + iterationConverges + ": " + SSE);
+					//display updatedCentroids - Final
+					displayUpdatedCentroidsAttr(updatedCentroids);
+					
+					//display Points of Dataset - Final
+					displayUpdatedPoints(point);
+					
+					//count number of points in clusters - Final
+					clustersSize(point);
+					System.out.println("\n\nFinal SSE: " + SSE);
 					break;
 				}else{
-					System.out.println("Iteration " + iterationConverges + ": " + newSSE);
+					System.out.println("\n\nIteration " + iterationConverges + ": " + newSSE);
 					//display updatedCentroids
-					displayUpdatedCentroids(updatedCentroids);					
+					displayUpdatedCentroidsAttr(updatedCentroids);	
+					
+
 				}			
 				if ((newSSE < threshold) || ((nIterations > 0) && (iterationConverges >= nIterations))) {
 					break;
@@ -96,6 +114,7 @@ public class kmeans {
 		}
 		System.out.println("Converges at iteration " + iterationConverges + "\n");			
 	}
+
 
 
 
@@ -197,12 +216,18 @@ public class kmeans {
 		//3. update claster's centroid
 		private double[][] updateClusterCentroid() {
 			int[] sizeOfCluster = new int[numOfClusters];
-			double[][] newCentroids = new double[numOfClusters][];			
+			double[][] centroidsAttrSum = new double[numOfClusters][]; //****
+			centroidsAttrAverage = new double[numOfClusters][];
+			double[][] newCentroidsAttr = new double[numOfClusters][];
 
-			for (int i = 0; i < numOfClusters; i++) {				
-				newCentroids[i] = new double[numOfDimension];				
+			for (int i = 0; i < numOfClusters; i++) {
+				centroidsAttrSum[i] = new double[numOfDimension];
+				centroidsAttrAverage[i] = new double[numOfDimension];
+				newCentroidsAttr[i] = new double[numOfDimension];
 				for (int j = 0; j < numOfDimension; j++) {
-					newCentroids[i][j] = 0;					
+					centroidsAttrSum[i][j] = 0;
+					centroidsAttrAverage[i][j] = 0;
+					newCentroidsAttr[i][j] = 0;
 				}				
 				sizeOfCluster[i] = 0; // set to 0
 			}
@@ -212,55 +237,108 @@ public class kmeans {
 			for (int i = 0; i < numOfPoints; i++) {				
 				int cluster = point[i];
 				
-				//add attributes to points
-				for (int j = 0; j < numOfDimension; j++) {					
-					newCentroids[cluster][j] = newCentroids[cluster][j] + dataset[i][j]; 
+				//add attributes to points and sum them
+				for (int j = 0; j < numOfDimension; j++) {	
+					centroidsAttrSum[cluster][j] = centroidsAttrSum[cluster][j] + dataset[i][j];
+//					centroidsAttrAverage[cluster][j] = centroidsAttrAverage[cluster][j] + dataset[i][j];
 				}
 				sizeOfCluster[cluster]++;
 			}
 
+			
 			// find average of the centroids' attributes 
 			for (int i = 0; i < numOfClusters; i++) {
 				for (int j = 0; j < numOfDimension; j++) {
-					newCentroids[i][j] = newCentroids[i][j] / sizeOfCluster[i]; 
-//					System.out.print(newCentroids[i][j] +" ");
+					centroidsAttrAverage[i][j] = centroidsAttrSum[i][j] / sizeOfCluster[i]; 
+//					System.out.print(centroidsAttrAverage[i][j] +" ");
 				}
 //				System.out.println();
 			}
 			
 			
+			//find mean of the average of the centroids' attributes			
+//			double[] newCentroidsAttrSum = new double[numOfDimension];
+			double[] meanOfAverage = new double[numOfClusters];
+			for (int i = 0; i < numOfClusters; i++) {
+				for (int j = 0; j < numOfDimension; j++) {
+					meanOfAverage[i] = meanOfAverage[i] + centroidsAttrAverage[i][j];					
+				}
+				meanOfAverage[i] = meanOfAverage[i] / numOfDimension;
+			}
+				
+			
 			
 			//find new attributes for centroids (Convert attributes values to 0 and 1)
 			for (int i = 0; i < numOfClusters; i++) {
 				for (int j = 0; j < numOfDimension; j++) {
-					if(newCentroids[i][j] < Attributes_Average[i]){
-						newCentroids[i][j] = 0; 
+					if(centroidsAttrAverage[i][j] < meanOfAverage[i]){ //Attributes_Average[i])
+						newCentroidsAttr[i][j] = 0; 
 					}
 					else {
-						newCentroids[i][j] = 1; 
+						newCentroidsAttr[i][j] = 1; 
 					}					
 				}				
-			}				
-			return newCentroids;
+			}
+			
+			
+			return newCentroidsAttr;
 		}
 		
 
 		
 		//4. find convergence
+//		private double findConverge(double[][] center_old, double[][] center_new, double threshold) {
+//			double sse = 0.0;
+//			for (int i = 0; i < numOfPoints; i++) {
+//				//assign points to a cluster				
+//				int cluster = point[i];
+//				sse += distance ( dataset[i], center_new[cluster] );
+//			}
+//			return sse; //sse/numOfClusters
+//		}
+//		private double findConverge(double[][] center_old, double[][] center_new, double threshold) {
+//			double minD = 0.0;
+////			double d = 0.0;
+//			for (int i = 0; i < numOfClusters; i++) {
+//				double d = distance ( center_old[i], center_new[i] );
+//				if (d>minD){
+//					minD = d;
+//				}
+//			}
+//			return minD;
+//		}
+		
+//		private double findConverge(double[][] center_avr, double threshold) {
+//		double sse = 0.0;
+//		double d = 0.0;
+//		for (int i = 0; i < numOfPoints; i++) {
+//			//assign points to a cluster				
+//			int cluster = point[i];
+//			d = distance ( dataset[i], center_avr[cluster] );
+//			double dd = d*d;
+//			sse += dd; //SSW == SSE						
+//		}
+//		return sse;
+//	}
 		private double findConverge(double[][] center_old, double[][] center_new, double threshold) {
-			double sse = 0.0;
-			for (int i = 0; i < numOfPoints; i++) {
-				//assign points to a cluster				
-				int cluster = point[i];
-				sse += distance ( dataset[i], center_new[cluster] );
-			}
-			return sse;
+		//
+//		private double findConverge(double[][] center_avr, double threshold) {
+		double sse = 0.0;
+		double d = 0.0;
+		for (int i = 0; i < numOfPoints; i++) {
+			//assign points to a cluster				
+			int cluster = point[i];
+			d = distance ( dataset[i], center_new[cluster] );
+			double dd = d*d;
+			sse += dd; //SSW == SSE						
 		}
+		return sse;
+	}
 		
 		
 		
-		//display updatedCentroids
-		private void displayUpdatedCentroids(double[][] updatedCentroidsF) {
+		//display updatedCentroids attributes
+		private void displayUpdatedCentroidsAttr(double[][] updatedCentroidsF) {
 			System.out.println("Updated Centroids:");
 			for (int i = 0; i < numOfClusters; i++) {
 				for (int j = 0; j < numOfDimension; j++) {
@@ -268,6 +346,36 @@ public class kmeans {
 				}
 				System.out.println();
 			}		
+		}
+		
+		
+		
+		//display UpdatedPoints
+		private void displayUpdatedPoints(int[] point2) {			
+			System.out.print("Points: ");
+			for (int i = 0; i < numOfPoints; i++) {
+				System.out.print(point[i]+", ");
+			}
+			
+		}
+		
+		
+		
+		//count number of points in clusters
+		private void clustersSize(int[] point2) {
+			int[] cSize = new int[numOfClusters];
+			for (int i = 0; i < numOfPoints; i++) {
+				int cSizeCount = -1;
+				while(point[i] != cSizeCount){
+					cSizeCount++;
+				}
+				cSize[cSizeCount]++;
+			}
+			
+			System.out.print("\nClusters Size: ");
+			for (int i = 0; i < numOfClusters; i++) {
+				System.out.print(cSize[i] +" ");
+			}
 		}
 
 
