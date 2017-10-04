@@ -289,5 +289,22 @@ public class Calinski_Harabasz {
 			}
 			return temp_sSW;
 		}
+			
+			//count number of points in clusters
+			private void clustersSize(int[] point2) {
+				int[] cSize = new int[numOfClusters];
+				for (int i = 0; i < numOfPoints; i++) {
+					int cSizeCount = -1;
+					while(point[i] != cSizeCount){
+						cSizeCount++;
+					}
+					cSize[cSizeCount]++;
+				}
+				
+				System.out.print("\nClusters Size: ");
+				for (int i = 0; i < numOfClusters; i++) {
+					System.out.print(cSize[i] +" ");
+				}
+			}
 
 }
