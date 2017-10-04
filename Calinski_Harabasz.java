@@ -52,71 +52,7 @@ public class Calinski_Harabasz {
 			//3. update claster's centroid
 			updatedCentroids = updateClusterCentroid();	
 			
-			//3. update claster's centroid
-			private double[][] updateClusterCentroid() {
-				sizeOfCluster = new int[numOfClusters];
-				double[][] centroidsAttrSum = new double[numOfClusters][]; //****
-				centroidsAttrAverage = new double[numOfClusters][];
-				meanOfAverage = new double[numOfClusters];
-				double[][] newCentroidsAttr = new double[numOfClusters][];
-
-				for (int i = 0; i < numOfClusters; i++) {
-					centroidsAttrSum[i] = new double[numOfDimension];
-					centroidsAttrAverage[i] = new double[numOfDimension];
-					newCentroidsAttr[i] = new double[numOfDimension];
-					for (int j = 0; j < numOfDimension; j++) {
-						centroidsAttrSum[i][j] = 0; 	// set to 0
-						centroidsAttrAverage[i][j] = 0; // set to 0
-						newCentroidsAttr[i][j] = 0; 	// set to 0
-					}				
-					sizeOfCluster[i] = 0; // set to 0
-					meanOfAverage[i] = 0; // set to 0
-				}
-				
-				//3.1 assign points to a centroid and sum their attributes
-				centroidsAttrSum = findCentroidsAttrSum(centroidsAttrSum);
-				
-				//3.2 find average of the centroids' attributes 
-				centroidsAttrAverage = findCentroidsAttrAverage(centroidsAttrSum);
-				
-				//3.3 find mean of the average of the centroids' attributes
-				meanOfAverage = findMeanOfAverage();
-			}
-
-			//3.1 assign points to a centroid and sum their attributes
-			private double[][] findCentroidsAttrSum(double[][] centroidsAttrSum_F){
-				for (int i = 0; i < numOfPoints; i++) {				
-					int cluster = point[i];
-					
-					//add attributes to points and sum them
-					for (int j = 0; j < numOfDimension; j++) {	
-						centroidsAttrSum_F[cluster][j] = centroidsAttrSum_F[cluster][j] + dataset[i][j];
-					}
-					sizeOfCluster[cluster]++;
-				}
-				return centroidsAttrSum_F;
-			}
 			
-			//3.2 find average of the centroids' attributes 
-			private double[][] findCentroidsAttrAverage(double[][] centroidsAttrSum_F){
-				for (int i = 0; i < numOfClusters; i++) {
-					for (int j = 0; j < numOfDimension; j++) {
-						centroidsAttrAverage [i][j] = centroidsAttrSum_F[i][j] / sizeOfCluster[i]; 
-					}
-				}
-				return centroidsAttrAverage;
-			}
-			
-			//3.3 find mean of the average of the centroids' attributes
-			private double[] findMeanOfAverage(){
-				for (int i = 0; i < numOfClusters; i++) {
-					for (int j = 0; j < numOfDimension; j++) {
-						meanOfAverage[i] = meanOfAverage[i] + centroidsAttrAverage[i][j];					
-					}
-					meanOfAverage[i] = meanOfAverage[i] / numOfDimension;
-				}		
-				return meanOfAverage;
-			}
 		}
 					
 	}
@@ -213,7 +149,91 @@ public class Calinski_Harabasz {
 /*********** END Distances ***********/		
 	
 	
+	//3. update claster's centroid
+	private double[][] updateClusterCentroid() {
+		sizeOfCluster = new int[numOfClusters];
+		double[][] centroidsAttrSum = new double[numOfClusters][]; //****
+		centroidsAttrAverage = new double[numOfClusters][];
+		meanOfAverage = new double[numOfClusters];
+		double[][] newCentroidsAttr = new double[numOfClusters][];
+
+		for (int i = 0; i < numOfClusters; i++) {
+			centroidsAttrSum[i] = new double[numOfDimension];
+			centroidsAttrAverage[i] = new double[numOfDimension];
+			newCentroidsAttr[i] = new double[numOfDimension];
+			for (int j = 0; j < numOfDimension; j++) {
+				centroidsAttrSum[i][j] = 0; 	// set to 0
+				centroidsAttrAverage[i][j] = 0; // set to 0
+				newCentroidsAttr[i][j] = 0; 	// set to 0
+			}				
+			sizeOfCluster[i] = 0; // set to 0
+			meanOfAverage[i] = 0; // set to 0
+		}
+		
+		//3.1 assign points to a centroid and sum their attributes
+		centroidsAttrSum = findCentroidsAttrSum(centroidsAttrSum);
+		
+		//3.2 find average of the centroids' attributes 
+		centroidsAttrAverage = findCentroidsAttrAverage(centroidsAttrSum);
+		
+		//3.3 find mean of the average of the centroids' attributes
+		meanOfAverage = findMeanOfAverage();
+		
+		//3.4 find new attributes for centroids (Convert attributes values to 0 and 1)
+		newCentroidsAttr = findNewCentroidsAttr(newCentroidsAttr);	
+		
+		return newCentroidsAttr;
+	}
+
+	//3.1 assign points to a centroid and sum their attributes
+	private double[][] findCentroidsAttrSum(double[][] centroidsAttrSum_F){
+		for (int i = 0; i < numOfPoints; i++) {				
+			int cluster = point[i];
+			
+			//add attributes to points and sum them
+			for (int j = 0; j < numOfDimension; j++) {	
+				centroidsAttrSum_F[cluster][j] = centroidsAttrSum_F[cluster][j] + dataset[i][j];
+			}
+			sizeOfCluster[cluster]++;
+		}
+		return centroidsAttrSum_F;
+	}
 	
+	//3.2 find average of the centroids' attributes 
+	private double[][] findCentroidsAttrAverage(double[][] centroidsAttrSum_F){
+		for (int i = 0; i < numOfClusters; i++) {
+			for (int j = 0; j < numOfDimension; j++) {
+				centroidsAttrAverage [i][j] = centroidsAttrSum_F[i][j] / sizeOfCluster[i]; 
+			}
+		}
+		return centroidsAttrAverage;
+	}
+	
+	//3.3 find mean of the average of the centroids' attributes
+	private double[] findMeanOfAverage(){
+		for (int i = 0; i < numOfClusters; i++) {
+			for (int j = 0; j < numOfDimension; j++) {
+				meanOfAverage[i] = meanOfAverage[i] + centroidsAttrAverage[i][j];					
+			}
+			meanOfAverage[i] = meanOfAverage[i] / numOfDimension;
+		}		
+		return meanOfAverage;
+	}
+	
+	//3.4 find new attributes for centroids (Convert attributes values to 0 and 1)
+	private double[][] findNewCentroidsAttr(double[][] newCentroidsAttr){
+		for (int i = 0; i < numOfClusters; i++) {
+			for (int j = 0; j < numOfDimension; j++) {
+				if(centroidsAttrAverage[i][j] < meanOfAverage[i]){
+					newCentroidsAttr[i][j] = 0; 
+				}
+				else {
+					newCentroidsAttr[i][j] = 1; 
+				}					
+			}				
+		}
+		return newCentroidsAttr;
+	}
 		
 
 }
