@@ -78,6 +78,9 @@ public class Calinski_Harabasz {
 				
 				//3.2 find average of the centroids' attributes 
 				centroidsAttrAverage = findCentroidsAttrAverage(centroidsAttrSum);
+				
+				//3.3 find mean of the average of the centroids' attributes
+				meanOfAverage = findMeanOfAverage();
 			}
 
 			//3.1 assign points to a centroid and sum their attributes
@@ -102,6 +105,17 @@ public class Calinski_Harabasz {
 					}
 				}
 				return centroidsAttrAverage;
+			}
+			
+			//3.3 find mean of the average of the centroids' attributes
+			private double[] findMeanOfAverage(){
+				for (int i = 0; i < numOfClusters; i++) {
+					for (int j = 0; j < numOfDimension; j++) {
+						meanOfAverage[i] = meanOfAverage[i] + centroidsAttrAverage[i][j];					
+					}
+					meanOfAverage[i] = meanOfAverage[i] / numOfDimension;
+				}		
+				return meanOfAverage;
 			}
 		}
 					
