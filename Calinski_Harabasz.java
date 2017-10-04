@@ -9,7 +9,12 @@ public class Calinski_Harabasz {
 	private int numOfClusters;
 	private double[][] centroids;
 	private double threshold;
-	
+	private int[] point;
+	private int[] sizeOfCluster;
+	private double[][] centroidsAttrAverage;
+	private double[] meanOfAverage;
+	private double sSW; 	//sum of squared within-cluster scatter matrix (SSW)
+	private double sSB; 	//sum of squared between-cluster scatter matrix (SSB) 
 
 	
 	
@@ -19,8 +24,9 @@ public class Calinski_Harabasz {
 		numOfDimension = numOfDimensionMF;
 	}
 	
-			
-
+	
+	
+	
 	public void kMeanClusteringForCH(int nClusters, int nIterations, double iniThreshold, double[][] iniCentroids) {
 		numOfClusters = nClusters;
 		threshold = iniThreshold;
@@ -28,7 +34,24 @@ public class Calinski_Harabasz {
 		// 1. generate pseudo random centroids
 		centroids = generateCentroids(); 			//initial centroid
 		
+		double[][] updatedCentroids = centroids; 	//new initial centroid (updated)
+		int iterationConverges = 0; 				//numbers of iteration before converging
+		double newSSW = 0;							//sum of squared within-cluster scatter matrix (SSW) 
 		
+		//repeat until convergence
+		while (true) {
+			centroids = updatedCentroids;			
+			
+			point = new int[numOfPoints];			
+			for (int i = 0; i < numOfPoints; i++) {
+				//2. find points which are the nearest to a centroid
+				point[i] = nearest(dataset[i]);
+			}		
+
+
+			
+		}
+					
 	}
 	
 	
@@ -58,5 +81,72 @@ public class Calinski_Harabasz {
 	
 	
 	
+	// 2. find points which are the nearest to a centroid
+	private int nearest(double[] datasetRecords) {
+		//calculate the distance to centroid 0.
+		double minDistance = distance(datasetRecords, centroids[0]);
+		int pointIndex = 0;
+		
+		for (int i = 1; i < numOfClusters; i++) {
+			//calculate the distance to centroid i.
+			double minDistance2 = distance(datasetRecords, centroids[i]);
+			//find minimal distances
+			if (minDistance2 < minDistance) {
+				minDistance = minDistance2;
+				pointIndex = i;
+			}
+		}
+		return pointIndex;
+	}
 	
+	
+	
+/*********** Distances (Jaccard, Simple matching coefficient (SMC)) ***********/	
+	//Jaccard
+	private double distance(double[] vectors1, double[] vectors2) {
+		double Jaccard = 0;
+		double M01 = 0, M10 = 0, M11 = 0;
+		for (int i = 0; i < numOfDimension; i++) {
+			if((vectors1[i] == 0) && (vectors2[i] == 1)){
+				M01++;
+			}
+			if((vectors1[i] == 1) && (vectors2[i] == 0)){
+				M10++;
+			}
+			if((vectors1[i] == 1) && (vectors2[i] == 1)){
+				M11++;
+			}
+	}
+		Jaccard += (M01+M10)/(M01+M10+M11);
+		return Jaccard;
+	}
+	
+	
+//	//Simple matching coefficient (SMC)
+//	private double distance(double[] vectors1, double[] vectors2) {
+//		double SMC = 0;
+//		double M00 = 0, M01 = 0, M10 = 0, M11 = 0;
+//		for (int i = 0; i < numOfDimension; i++) {
+//			if(vectors1[i] == 0 && vectors2[i] == 0){
+//				M00++;
+//			}
+//			if(vectors1[i] == 0 && vectors2[i] == 1){
+//				M01++;
+//			}
+//			if(vectors1[i] == 1 && vectors2[i] == 0){
+//				M10++;
+//			}
+//			if(vectors1[i] == 1 && vectors2[i] == 1){
+//				M11++;
+//			}
+//	}
+//		SMC += (M00+M11)/(M00+M01+M10+M11);
+//		return SMC;
+//	}	
+/*********** END Distances ***********/		
+	
+	
+	
+		
+
 }
