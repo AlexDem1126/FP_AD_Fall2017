@@ -26,7 +26,24 @@ public class Calinski_Harabasz {
 	
 	
 	
+	public double getSSW() {
+		return sSW;
+	}
+	public void setSSW(double sSW) {
+		this.sSW = sSW;
+	}
+
+
+
+	public double getSSB() {
+		return sSB;
+	}
+	public void setSSB(double sSB) {
+		this.sSB = sSB;
+	}
 	
+	
+
 	public void kMeanClusteringForCH(int nClusters, int nIterations, double iniThreshold, double[][] iniCentroids) {
 		numOfClusters = nClusters;
 		threshold = iniThreshold;
@@ -54,30 +71,29 @@ public class Calinski_Harabasz {
 			
 			//4. find sum of squared between-cluster scatter matrix (SSB)
 			sSB = findSSB();
-			
+		
 			//5. calculation of SSE improvement
 			//find convergence or sum of squared within-cluster scatter matrix (SSW)
 			sSW = newSSW;
 			newSSW = findConverge(updatedCentroids);
-			iterationConverges++;
-			
-			if(sSW==newSSW){
-				System.out.println("Iteration " + iterationConverges + ": " + "sSW = "+ sSW +", sSB = "+ sSB);
+			iterationConverges++;	
 				
-				//count number of points in clusters - Final
-				clustersSize(point);
-				System.out.println("\nFinal SSW: " + sSW);
-				System.out.println("Final SSB: " + sSB);
-				break;
-			}else{
-				System.out.println("Iteration " + iterationConverges + ": " + "sSW = "+ newSSW +", sSB = "+ sSB);
-			}
-			if ((newSSW < threshold) || ((nIterations > 0) && (iterationConverges >= nIterations))) {
-				break;
-			}
-			
+				if(sSW==newSSW){
+					System.out.println("Iteration " + iterationConverges + ": " + "sSW = "+ sSW +", sSB = "+ sSB);
+					
+					//count number of points in clusters - Final
+					clustersSize(point);
+					System.out.println("\nFinal SSW: " + sSW);
+					System.out.println("Final SSB: " + sSB);
+					break;
+				}else{
+					System.out.println("Iteration " + iterationConverges + ": " + "sSW = "+ newSSW +", sSB = "+ sSB);
+				}			
+				if ((newSSW < threshold) || ((nIterations > 0) && (iterationConverges >= nIterations))) {
+					break;
+				}
 		}
-		System.out.println("Converges at iteration " + iterationConverges + "\n");				
+		System.out.println("Converges at iteration " + iterationConverges + "\n");			
 	}
 	
 	
@@ -172,168 +188,207 @@ public class Calinski_Harabasz {
 /*********** END Distances ***********/		
 	
 	
-	//3. update claster's centroid
-	private double[][] updateClusterCentroid() {
-		sizeOfCluster = new int[numOfClusters];
-		double[][] centroidsAttrSum = new double[numOfClusters][]; //****
-		centroidsAttrAverage = new double[numOfClusters][];
-		meanOfAverage = new double[numOfClusters];
-		double[][] newCentroidsAttr = new double[numOfClusters][];
+	
+		//3. update claster's centroid
+		private double[][] updateClusterCentroid() {
+			sizeOfCluster = new int[numOfClusters];
+			double[][] centroidsAttrSum = new double[numOfClusters][]; //****
+			centroidsAttrAverage = new double[numOfClusters][];
+			meanOfAverage = new double[numOfClusters];
+			double[][] newCentroidsAttr = new double[numOfClusters][];
 
-		for (int i = 0; i < numOfClusters; i++) {
-			centroidsAttrSum[i] = new double[numOfDimension];
-			centroidsAttrAverage[i] = new double[numOfDimension];
-			newCentroidsAttr[i] = new double[numOfDimension];
-			for (int j = 0; j < numOfDimension; j++) {
-				centroidsAttrSum[i][j] = 0; 	// set to 0
-				centroidsAttrAverage[i][j] = 0; // set to 0
-				newCentroidsAttr[i][j] = 0; 	// set to 0
-			}				
-			sizeOfCluster[i] = 0; // set to 0
-			meanOfAverage[i] = 0; // set to 0
+			for (int i = 0; i < numOfClusters; i++) {
+				centroidsAttrSum[i] = new double[numOfDimension];
+				centroidsAttrAverage[i] = new double[numOfDimension];
+				newCentroidsAttr[i] = new double[numOfDimension];
+				for (int j = 0; j < numOfDimension; j++) {
+					centroidsAttrSum[i][j] = 0; 	// set to 0
+					centroidsAttrAverage[i][j] = 0; // set to 0
+					newCentroidsAttr[i][j] = 0; 	// set to 0
+				}				
+				sizeOfCluster[i] = 0; // set to 0
+				meanOfAverage[i] = 0; // set to 0
+			}
+			
+
+			//3.1 assign points to a centroid and sum their attributes
+			centroidsAttrSum = findCentroidsAttrSum(centroidsAttrSum);
+			
+			
+			//3.2 find average of the centroids' attributes 
+			centroidsAttrAverage = findCentroidsAttrAverage(centroidsAttrSum);
+			
+			
+			//3.3 find mean of the average of the centroids' attributes
+			meanOfAverage = findMeanOfAverage();
+			
+						
+			//3.4 find new attributes for centroids (Convert attributes values to 0 and 1)
+			newCentroidsAttr = findNewCentroidsAttr(newCentroidsAttr);	
+			
+			return newCentroidsAttr;
 		}
+		
+		
 		
 		//3.1 assign points to a centroid and sum their attributes
-		centroidsAttrSum = findCentroidsAttrSum(centroidsAttrSum);
+		private double[][] findCentroidsAttrSum(double[][] centroidsAttrSum_F){
+			for (int i = 0; i < numOfPoints; i++) {				
+				int cluster = point[i];
+				
+				//add attributes to points and sum them
+				for (int j = 0; j < numOfDimension; j++) {	
+					centroidsAttrSum_F[cluster][j] = centroidsAttrSum_F[cluster][j] + dataset[i][j];
+				}
+				sizeOfCluster[cluster]++;
+			}
+			return centroidsAttrSum_F;
+		}
+		
+		
 		
 		//3.2 find average of the centroids' attributes 
-		centroidsAttrAverage = findCentroidsAttrAverage(centroidsAttrSum);
+		private double[][] findCentroidsAttrAverage(double[][] centroidsAttrSum_F){
+			for (int i = 0; i < numOfClusters; i++) {
+				for (int j = 0; j < numOfDimension; j++) {
+					centroidsAttrAverage [i][j] = centroidsAttrSum_F[i][j] / sizeOfCluster[i]; 
+				}
+			}
+			return centroidsAttrAverage;
+		}
+
+		
 		
 		//3.3 find mean of the average of the centroids' attributes
-		meanOfAverage = findMeanOfAverage();
+		private double[] findMeanOfAverage(){
+			for (int i = 0; i < numOfClusters; i++) {
+				for (int j = 0; j < numOfDimension; j++) {
+					meanOfAverage[i] = meanOfAverage[i] + centroidsAttrAverage[i][j];					
+				}
+				meanOfAverage[i] = meanOfAverage[i] / numOfDimension;
+			}		
+			return meanOfAverage;
+		}
+			
 		
+				
 		//3.4 find new attributes for centroids (Convert attributes values to 0 and 1)
-		newCentroidsAttr = findNewCentroidsAttr(newCentroidsAttr);	
+		private double[][] findNewCentroidsAttr(double[][] newCentroidsAttr){
+			for (int i = 0; i < numOfClusters; i++) {
+				for (int j = 0; j < numOfDimension; j++) {
+					if(centroidsAttrAverage[i][j] < meanOfAverage[i]){
+						newCentroidsAttr[i][j] = 0; 
+					}
+					else {
+						newCentroidsAttr[i][j] = 1; 
+					}					
+				}				
+			}
+			return newCentroidsAttr;
+		}
 		
-		return newCentroidsAttr;
-	}
+		
+		
+		//4. Find sum of squared between-cluster scatter matrix (SSB)
+		//calculation how much of the variation is due to variation between mean and mean of mean
+		private double findSSB(){			
+			double sSB = 0;			
+			for (int i = 0; i < numOfClusters; i++) {	
+				double sB = 0;				
+				for (int j = 0; j < numOfDimension; j++) {
+					
+					double MM = centroidsAttrAverage[i][j] - meanOfAverage[i];
+					double MM2 = MM*MM;					
+					sB += sizeOfCluster[i] * MM2; //squared between
+				}
+				sSB += sB; //sum of squared between							
+			}
+			return sSB;
+		}
+		
 
-	//3.1 assign points to a centroid and sum their attributes
-	private double[][] findCentroidsAttrSum(double[][] centroidsAttrSum_F){
-		for (int i = 0; i < numOfPoints; i++) {				
+		
+		//5. find convergence or sum of squared within-cluster scatter matrix (SSW)
+		private double findConverge(double[][] center_new) {
+		double temp_sSW = 0.0;
+		double d = 0.0;
+		for (int i = 0; i < numOfPoints; i++) {
+			//assign points to a cluster				
 			int cluster = point[i];
-			
-			//add attributes to points and sum them
-			for (int j = 0; j < numOfDimension; j++) {	
-				centroidsAttrSum_F[cluster][j] = centroidsAttrSum_F[cluster][j] + dataset[i][j];
-			}
-			sizeOfCluster[cluster]++;
+			d = distance ( dataset[i], center_new[cluster] );
+			double dd = d*d;
+			temp_sSW += dd; //temp_sSW or SSW == SSE (sum of squared errors of prediction)						
 		}
-		return centroidsAttrSum_F;
+		return temp_sSW;
 	}
-	
-	//3.2 find average of the centroids' attributes 
-	private double[][] findCentroidsAttrAverage(double[][] centroidsAttrSum_F){
-		for (int i = 0; i < numOfClusters; i++) {
-			for (int j = 0; j < numOfDimension; j++) {
-				centroidsAttrAverage [i][j] = centroidsAttrSum_F[i][j] / sizeOfCluster[i]; 
-			}
-		}
-		return centroidsAttrAverage;
-	}
-	
-	//3.3 find mean of the average of the centroids' attributes
-	private double[] findMeanOfAverage(){
-		for (int i = 0; i < numOfClusters; i++) {
-			for (int j = 0; j < numOfDimension; j++) {
-				meanOfAverage[i] = meanOfAverage[i] + centroidsAttrAverage[i][j];					
-			}
-			meanOfAverage[i] = meanOfAverage[i] / numOfDimension;
-		}		
-		return meanOfAverage;
-	}
-	
-	//3.4 find new attributes for centroids (Convert attributes values to 0 and 1)
-	private double[][] findNewCentroidsAttr(double[][] newCentroidsAttr){
-		for (int i = 0; i < numOfClusters; i++) {
-			for (int j = 0; j < numOfDimension; j++) {
-				if(centroidsAttrAverage[i][j] < meanOfAverage[i]){
-					newCentroidsAttr[i][j] = 0; 
-				}
-				else {
-					newCentroidsAttr[i][j] = 1; 
-				}					
-			}				
-		}
-		return newCentroidsAttr;
-	}
+
 		
 	
-	//4. Find sum of squared between-cluster scatter matrix (SSB)
-			//calculation how much of the variation is due to variation between mean and mean of mean
-			private double findSSB(){			
-				double sSB = 0;			
-				for (int i = 0; i < numOfClusters; i++) {	
-					double sB = 0;				
-					for (int j = 0; j < numOfDimension; j++) {
-						
-						double MM = centroidsAttrAverage[i][j] - meanOfAverage[i];
-						double MM2 = MM*MM;					
-						sB += sizeOfCluster[i] * MM2; //squared between
-					}
-					sSB += sB; //sum of squared between							
-				}
-				return sSB;
-			}
-			
-			//5. find convergence or sum of squared within-cluster scatter matrix (SSW)
-			private double findConverge(double[][] center_new) {
-			double temp_sSW = 0.0;
-			double d = 0.0;
+		//count number of points in clusters
+		private void clustersSize(int[] point2) {
+			int[] cSize = new int[numOfClusters];
 			for (int i = 0; i < numOfPoints; i++) {
-				//assign points to a cluster				
-				int cluster = point[i];
-				d = distance ( dataset[i], center_new[cluster] );
-				double dd = d*d;
-				temp_sSW += dd; //temp_sSW or SSW == SSE (sum of squared errors of prediction)						
+				int cSizeCount = -1;
+				while(point[i] != cSizeCount){
+					cSizeCount++;
+				}
+				cSize[cSizeCount]++;
 			}
-			return temp_sSW;
+			
+			System.out.print("\nClusters Size: ");
+			for (int i = 0; i < numOfClusters; i++) {
+				System.out.print(cSize[i] +" ");
+			}
 		}
-			
-			//count number of points in clusters
-			private void clustersSize(int[] point2) {
-				int[] cSize = new int[numOfClusters];
-				for (int i = 0; i < numOfPoints; i++) {
-					int cSizeCount = -1;
-					while(point[i] != cSizeCount){
-						cSizeCount++;
-					}
-					cSize[cSizeCount]++;
-				}
-				
-				System.out.print("\nClusters Size: ");
-				for (int i = 0; i < numOfClusters; i++) {
-					System.out.print(cSize[i] +" ");
-				}
-			}
 
+
+		
+		
+		public double kCalinski_Harabasz_Index(double sSW_Smallest, double sSB_Highest) {
+			double sSW_S = sSW_Smallest;
+			double sSB_H = sSB_Highest;
 			
-			public double kCalinski_Harabasz_Index(double sSW_Smallest, double sSB_Highest) {
-				double sSW_S = sSW_Smallest;
-				double sSB_H = sSB_Highest;
-				
-				//lower overall intracluster distance (within-cluster scatter matrices)
-				double traceSSW = sSW_S/numOfClusters;
-				
-				//higher overall intercluster distance (between-cluster scatter matrices)
-				double traceSSB = sSB_H/numOfClusters;
-				
-				//Calinski_Harabasz_Index
-				double CH_Index = ((numOfPoints - numOfClusters)/(numOfClusters - 1))*(traceSSB/traceSSW);
-				return CH_Index;
-			}
+			//lower overall intracluster distance (within-cluster scatter matrices)
+			double traceSSW = sSW_S/numOfClusters;
 			
-			//find smallest index of SSW
-			public int findSmallestSSW(double[] sSW_R_F) {
-				double[] sSW_R = sSW_R_F;
-				int indexSSW = 0;
-				double smallest = sSW_R[0];
-				for(int i = 0; i < sSW_R.length; i++){
-					if(sSW_R[i] < smallest){
-						smallest = sSW_R[i];
-						indexSSW = i;
-					}
+			//higher overall intercluster distance (between-cluster scatter matrices)
+			double traceSSB = sSB_H/numOfClusters;
+			
+			//Calinski_Harabasz_Index
+			double CH_Index = ((numOfPoints - numOfClusters)/(numOfClusters - 1))*(traceSSB/traceSSW);
+			return CH_Index;
+		}
+
+
+		
+		//find smallest index of SSW
+		public int findSmallestSSW(double[] sSW_R_F) {
+			double[] sSW_R = sSW_R_F;
+			int indexSSW = 0;
+			double smallest = sSW_R[0];
+			for(int i = 0; i < sSW_R.length; i++){
+				if(sSW_R[i] < smallest){
+					smallest = sSW_R[i];
+					indexSSW = i;
 				}
-				return indexSSW;
 			}
+			return indexSSW;
+		}
+
+
+		
+		//find the largest CH index, which will represent the best number of clusters
+		public int findLargestCH(double[] cH_F) {
+			double[] cH = cH_F;
+			int indexOfCH = 0;
+			double largest = cH[0];
+			for(int i = 0; i < cH.length; i++){
+				if(cH[i] > largest){
+					largest = cH[i];
+					indexOfCH = i;
+				}
+			}			
+			return indexOfCH+2;			
+		}
+
 }
