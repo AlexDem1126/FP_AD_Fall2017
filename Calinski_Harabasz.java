@@ -52,6 +52,8 @@ public class Calinski_Harabasz {
 			//3. update claster's centroid
 			updatedCentroids = updateClusterCentroid();	
 			
+			//4. find sum of squared between-cluster scatter matrix (SSB)
+			sSB = findSSB();
 			
 		}
 					
@@ -235,5 +237,22 @@ public class Calinski_Harabasz {
 		return newCentroidsAttr;
 	}
 		
+	
+	//4. Find sum of squared between-cluster scatter matrix (SSB)
+			//calculation how much of the variation is due to variation between mean and mean of mean
+			private double findSSB(){			
+				double sSB = 0;			
+				for (int i = 0; i < numOfClusters; i++) {	
+					double sB = 0;				
+					for (int j = 0; j < numOfDimension; j++) {
+						
+						double MM = centroidsAttrAverage[i][j] - meanOfAverage[i];
+						double MM2 = MM*MM;					
+						sB += sizeOfCluster[i] * MM2; //squared between
+					}
+					sSB += sB; //sum of squared between							
+				}
+				return sSB;
+			}
 
 }
