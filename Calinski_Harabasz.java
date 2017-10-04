@@ -307,4 +307,19 @@ public class Calinski_Harabasz {
 				}
 			}
 
+			
+			public double kCalinski_Harabasz_Index(double sSW_Smallest, double sSB_Highest) {
+				double sSW_S = sSW_Smallest;
+				double sSB_H = sSB_Highest;
+				
+				//lower overall intracluster distance (within-cluster scatter matrices)
+				double traceSSW = sSW_S/numOfClusters;
+				
+				//higher overall intercluster distance (between-cluster scatter matrices)
+				double traceSSB = sSB_H/numOfClusters;
+				
+				//Calinski_Harabasz_Index
+				double CH_Index = ((numOfPoints - numOfClusters)/(numOfClusters - 1))*(traceSSB/traceSSW);
+				return CH_Index;
+			}
 }
