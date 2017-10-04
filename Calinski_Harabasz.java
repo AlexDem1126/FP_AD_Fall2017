@@ -322,4 +322,18 @@ public class Calinski_Harabasz {
 				double CH_Index = ((numOfPoints - numOfClusters)/(numOfClusters - 1))*(traceSSB/traceSSW);
 				return CH_Index;
 			}
+			
+			//find smallest index of SSW
+			public int findSmallestSSW(double[] sSW_R_F) {
+				double[] sSW_R = sSW_R_F;
+				int indexSSW = 0;
+				double smallest = sSW_R[0];
+				for(int i = 0; i < sSW_R.length; i++){
+					if(sSW_R[i] < smallest){
+						smallest = sSW_R[i];
+						indexSSW = i;
+					}
+				}
+				return indexSSW;
+			}
 }
