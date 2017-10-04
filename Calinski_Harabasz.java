@@ -49,6 +49,32 @@ public class Calinski_Harabasz {
 			}		
 
 
+			//3. update claster's centroid
+			updatedCentroids = updateClusterCentroid();	
+			
+			//3. update claster's centroid
+			private double[][] updateClusterCentroid() {
+				sizeOfCluster = new int[numOfClusters];
+				double[][] centroidsAttrSum = new double[numOfClusters][]; //****
+				centroidsAttrAverage = new double[numOfClusters][];
+				meanOfAverage = new double[numOfClusters];
+				double[][] newCentroidsAttr = new double[numOfClusters][];
+
+				for (int i = 0; i < numOfClusters; i++) {
+					centroidsAttrSum[i] = new double[numOfDimension];
+					centroidsAttrAverage[i] = new double[numOfDimension];
+					newCentroidsAttr[i] = new double[numOfDimension];
+					for (int j = 0; j < numOfDimension; j++) {
+						centroidsAttrSum[i][j] = 0; 	// set to 0
+						centroidsAttrAverage[i][j] = 0; // set to 0
+						newCentroidsAttr[i][j] = 0; 	// set to 0
+					}				
+					sizeOfCluster[i] = 0; // set to 0
+					meanOfAverage[i] = 0; // set to 0
+				}
+			
+			}
+
 			
 		}
 					
