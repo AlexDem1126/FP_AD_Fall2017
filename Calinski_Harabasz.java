@@ -61,6 +61,18 @@ public class Calinski_Harabasz {
 			newSSW = findConverge(updatedCentroids);
 			iterationConverges++;
 			
+			if(sSW==newSSW){
+				System.out.println("Iteration " + iterationConverges + ": " + "sSW = "+ sSW +", sSB = "+ sSB);
+				
+				//count number of points in clusters - Final
+				clustersSize(point);
+				System.out.println("\nFinal SSW: " + sSW);
+				System.out.println("Final SSB: " + sSB);
+				break;
+			}else{
+				System.out.println("Iteration " + iterationConverges + ": " + "sSW = "+ newSSW +", sSB = "+ sSB);
+			}
+			
 		}
 					
 	}
