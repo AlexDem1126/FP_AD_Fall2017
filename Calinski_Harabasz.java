@@ -72,10 +72,24 @@ public class Calinski_Harabasz {
 					sizeOfCluster[i] = 0; // set to 0
 					meanOfAverage[i] = 0; // set to 0
 				}
-			
+				
+				//3.1 assign points to a centroid and sum their attributes
+				centroidsAttrSum = findCentroidsAttrSum(centroidsAttrSum);
 			}
 
-			
+			//3.1 assign points to a centroid and sum their attributes
+			private double[][] findCentroidsAttrSum(double[][] centroidsAttrSum_F){
+				for (int i = 0; i < numOfPoints; i++) {				
+					int cluster = point[i];
+					
+					//add attributes to points and sum them
+					for (int j = 0; j < numOfDimension; j++) {	
+						centroidsAttrSum_F[cluster][j] = centroidsAttrSum_F[cluster][j] + dataset[i][j];
+					}
+					sizeOfCluster[cluster]++;
+				}
+				return centroidsAttrSum_F;
+			}
 		}
 					
 	}
