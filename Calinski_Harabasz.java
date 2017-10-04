@@ -55,6 +55,12 @@ public class Calinski_Harabasz {
 			//4. find sum of squared between-cluster scatter matrix (SSB)
 			sSB = findSSB();
 			
+			//5. calculation of SSE improvement
+			//find convergence or sum of squared within-cluster scatter matrix (SSW)
+			sSW = newSSW;
+			newSSW = findConverge(updatedCentroids);
+			iterationConverges++;
+			
 		}
 					
 	}
@@ -254,5 +260,19 @@ public class Calinski_Harabasz {
 				}
 				return sSB;
 			}
+			
+			//5. find convergence or sum of squared within-cluster scatter matrix (SSW)
+			private double findConverge(double[][] center_new) {
+			double temp_sSW = 0.0;
+			double d = 0.0;
+			for (int i = 0; i < numOfPoints; i++) {
+				//assign points to a cluster				
+				int cluster = point[i];
+				d = distance ( dataset[i], center_new[cluster] );
+				double dd = d*d;
+				temp_sSW += dd; //temp_sSW or SSW == SSE (sum of squared errors of prediction)						
+			}
+			return temp_sSW;
+		}
 
 }
