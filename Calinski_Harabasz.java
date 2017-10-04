@@ -72,9 +72,12 @@ public class Calinski_Harabasz {
 			}else{
 				System.out.println("Iteration " + iterationConverges + ": " + "sSW = "+ newSSW +", sSB = "+ sSB);
 			}
+			if ((newSSW < threshold) || ((nIterations > 0) && (iterationConverges >= nIterations))) {
+				break;
+			}
 			
 		}
-					
+		System.out.println("Converges at iteration " + iterationConverges + "\n");				
 	}
 	
 	
