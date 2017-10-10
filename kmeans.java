@@ -15,6 +15,13 @@ public class kmeans {
 	private double[] Attributes_Average;
 
 	
+	public int[] getPoint() {
+		return point;
+	}
+	public void setPoint(int[] point) {
+		this.point = point;
+	}
+	
 	
 	public kmeans(double[][] datasetMF, int numOfPointsMF, int numOfDimensionMF) {
 		dataset = datasetMF;
