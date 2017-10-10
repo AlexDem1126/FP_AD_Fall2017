@@ -294,42 +294,7 @@ public class kmeans {
 
 		
 		//4. find convergence
-//		private double findConverge(double[][] center_old, double[][] center_new, double threshold) {
-//			double sse = 0.0;
-//			for (int i = 0; i < numOfPoints; i++) {
-//				//assign points to a cluster				
-//				int cluster = point[i];
-//				sse += distance ( dataset[i], center_new[cluster] );
-//			}
-//			return sse; //sse/numOfClusters
-//		}
-//		private double findConverge(double[][] center_old, double[][] center_new, double threshold) {
-//			double minD = 0.0;
-////			double d = 0.0;
-//			for (int i = 0; i < numOfClusters; i++) {
-//				double d = distance ( center_old[i], center_new[i] );
-//				if (d>minD){
-//					minD = d;
-//				}
-//			}
-//			return minD;
-//		}
-		
-//		private double findConverge(double[][] center_avr, double threshold) {
-//		double sse = 0.0;
-//		double d = 0.0;
-//		for (int i = 0; i < numOfPoints; i++) {
-//			//assign points to a cluster				
-//			int cluster = point[i];
-//			d = distance ( dataset[i], center_avr[cluster] );
-//			double dd = d*d;
-//			sse += dd; //SSW == SSE						
-//		}
-//		return sse;
-//	}
 		private double findConverge(double[][] center_old, double[][] center_new, double threshold) {
-		//
-//		private double findConverge(double[][] center_avr, double threshold) {
 		double sse = 0.0;
 		double d = 0.0;
 		for (int i = 0; i < numOfPoints; i++) {
