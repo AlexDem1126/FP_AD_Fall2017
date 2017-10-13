@@ -12,10 +12,10 @@ public class manageFile_A {
 	public String fileName;
 	private int numOfPoints;
 	private int numOfDimension;	
-	private String[][] wineName;
+	private String[] wineName;
 	private double[][] dataset;
-	private int[][] vintage;
-	private double[][] trueGrade;
+	private int[] vintage;
+	private double[] trueGrade; 
 	
 	
 	
@@ -36,26 +36,26 @@ public class manageFile_A {
 	}
 
 	
-	public String[][] getWineName() {
+	public String[] getWineName() { 
 		return wineName;
 	}
-	public void setWineName(String[][] wineName) {
+	public void setWineName(String[] wineName) { 
 		this.wineName = wineName;
 	}
 
 	
-	public int[][] getVintage() {
+	public int[] getVintage() { 
 		return vintage;
 	}
-	public void setVintage(int[][] vintage) {
+	public void setVintage(int[] vintage) { 
 		this.vintage = vintage;
 	}
 
 	
-	public double[][] getTrueGrade() {
+	public double[] getTrueGrade() { 
 		return trueGrade;
 	}
-	public void setTrueGrade(double[][] trueGrade) {
+	public void setTrueGrade(double[] trueGrade) { 
 		this.trueGrade = trueGrade;
 	}
 
@@ -98,42 +98,28 @@ public manageFile_A(String fileName2) {
          			br = new BufferedReader(new FileReader(fileName));      
          			fileData_L_temp =  new ArrayList<String>();         			
          			
-         			wineName = new String[numOfRows][];
-         			for (int i = 0; i < numOfRows; i++) {
-//         				wineName[i] = new String[numOfColumns-307];	
-         				wineName[i] = new String[numOfColumns-7];	
-        			}	
-         			
+         			wineName = new String[numOfRows]; 
+       			
          			dataset = new double[numOfRows][];
          			for (int i = 0; i < numOfRows; i++) {
          				dataset[i] = new double[numOfColumns-3];				
         			}	
          			numOfPoints = numOfRows;
          			numOfDimension = numOfColumns-3;
+         			
+         			vintage = new int[numOfRows];
+         			
+         			trueGrade = new double[numOfRows];
+	
 
          			
-         			vintage = new int[numOfRows][];
-         			for (int i = 0; i < numOfRows; i++) {
-//         				vintage[i] = new int[numOfColumns-307];	
-         				vintage[i] = new int[numOfColumns-7];	
-        			}	
-         			
-         			trueGrade = new double[numOfRows][];
-         			for (int i = 0; i < numOfRows; i++) {
-//         				trueGrade[i] = new double[numOfColumns-307];
-         				trueGrade[i] = new double[numOfColumns-7];
-        			}	       			
-
-         			
-         			int nrow = 0;
-         			int ncol = 0;
-         			
+         			int nrow = 0;      			
          			line = "";
          			double[] line2;
 //                    line = br.readLine();
                     while ((line = br.readLine()) != null) {
                     	String[] line_temp2 = line.split(",");                    	
-                    	wineName[nrow][ncol] = line_temp2[0];
+                    	wineName[nrow] = line_temp2[0]; 
                     	
                     	line2 = new double[line_temp2.length-3];
                     	
@@ -146,12 +132,10 @@ public manageFile_A(String fileName2) {
                     	}
                     	dataset[nrow] = line2;                     	
 
-                    	vintage[nrow][ncol] = Integer.parseInt(line_temp2[6]);
-                    	trueGrade[nrow][ncol] = Double.parseDouble(line_temp2[7]); 
+                    	vintage[nrow] = Integer.parseInt(line_temp2[6]); 
+                    	trueGrade[nrow] = Double.parseDouble(line_temp2[7]);  
 //                    	vintage[nrow][ncol] = Integer.parseInt(line_temp2[306]);
-//                    	trueGrade[nrow][ncol] = Double.parseDouble(line_temp2[307]); 
-
-//                    	System.out.println(nrow+ "   "+wineName[nrow][ncol]+ "   "+vintage[nrow][ncol]+ "   "+trueGrade[nrow][ncol]);                    	
+//                    	trueGrade[nrow][ncol] = Double.parseDouble(line_temp2[307]);                   	
                     nrow++;
                     }
         			//print data from file
