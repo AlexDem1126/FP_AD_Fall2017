@@ -22,28 +22,29 @@ public class Naive_Bayes {
 		dataset = datasetMF;
 		numOfPoints = numOfPointsMF;
 		numOfDimension = numOfDimensionMF;
-		//ProbabilityOfClassH = findProbabilityOfClassH();
+		ProbabilityOfClassH = findProbabilityOfClassH();
 	}
 	
 	
 	//find probability of occurrence of class H
 	private double[] findProbabilityOfClassH(){
+		classType = new double[numOfTrueClasses_H];
 		//count true classes in the testing dataset
 		for (int i = 0; i < numOfPoints; i++) {	
 			int c1 = 0;
-			int c2 = 0;
+			int c2 = 1;
 			if(trueGrade[i] >= 90){
 				classType[c1]++; //class90Plus++;
 			}
 			else{
-				classType[c1]++; //class90Minus++;
+				classType[c2]++; //class90Minus++;
 			}
 		}
 		
 		ProbabilityOfClassH = new double[numOfTrueClasses_H];
 		for (int i = 0; i < numOfTrueClasses_H; i++) {	
 			ProbabilityOfClassH[i] = classType[i] / numOfPoints; 
-			System.out.print("Probability Of ClassH "+i +": " + ProbabilityOfClassH[i]);
+			System.out.println("Probability Of ClassH "+i +": " + ProbabilityOfClassH[i]);
 		}
 		
 		return ProbabilityOfClassH;
