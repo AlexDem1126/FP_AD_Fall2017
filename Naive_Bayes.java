@@ -29,6 +29,8 @@ public class Naive_Bayes {
 		numOfPoints = numOfPointsMF;
 		numOfDimension = numOfDimensionMF;
 		ProbabilityOfClassH = findProbabilityOfClassH();
+		countInstanceX_givenClassH();
+		findProbabilityInstanceX_givenClassH();		
 	}
 	
 	
@@ -60,19 +62,23 @@ public class Naive_Bayes {
 	
 	//count instance X given class H
 	private void countInstanceX_givenClassH(){
+		zero90Plus = new int[numOfDimension];
+		zero90Minus = new int[numOfDimension];
+		one90Plus = new int[numOfDimension];
+		one90Minus = new int[numOfDimension];
 		for (int i = 0; i < numOfPoints; i++) {
 			for (int j = 0; j < numOfDimension; j++) {
 				if((dataset[i][j] == 0) && (trueGrade[i] >= 90)){
-					zero90Plus[i]++;
+					zero90Plus[j]++;
 				}
 				else if ((dataset[i][j] == 0) && (trueGrade[i] < 90)){
-					zero90Minus[i]++;
+					zero90Minus[j]++;
 				}
 				else if ((dataset[i][j] == 1) && (trueGrade[i] >= 90)){
-					one90Plus[i]++;
+					one90Plus[j]++;
 				}
 				else if ((dataset[i][j] == 1) && (trueGrade[i] < 90)){
-					one90Minus[i]++;
+					one90Minus[j]++;
 				}
 				else {
 					System.out.println("ERROR: value of attribute ["+i+"]["+j+"] is not equal to 0 or 1.");
@@ -84,13 +90,17 @@ public class Naive_Bayes {
 	
 	
 	
-	//find probability of generating instance X given class H
+	//find probability of generating instance X given class H, then multiply them
 	private void findProbabilityInstanceX_givenClassH(){
+		prb_zero90Plus = 1;
+		prb_zero90Minus = 1;
+		prb_one90Plus = 1;
+		prb_one90Minus = 1;
 		for (int i = 0; i < numOfDimension; i++) {
-			prb_zero90Plus =  zero90Plus[i] / classType[0];
-			prb_zero90Minus =  zero90Minus[i] / classType[1];
-			prb_one90Plus =  one90Plus[i] / classType[0];
-			prb_one90Minus =  zero90Minus[i] / classType[1];							
+			prb_zero90Plus = prb_zero90Plus * (zero90Plus[i] / classType[0]);
+			prb_zero90Minus = prb_zero90Minus * (zero90Minus[i] / classType[0]);
+			prb_one90Plus =  prb_one90Plus * (one90Plus[i] / classType[1]);
+			prb_one90Minus =  prb_one90Minus * (one90Minus[i] / classType[1]);							
 		}				
 	}
 	
