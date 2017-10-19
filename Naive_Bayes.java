@@ -10,9 +10,11 @@ public class Naive_Bayes {
 	private int numOfDimension;
 	private int numOfTrueClasses_H = 2; //assign number of true classes in the testing dataset
 	private double[] classType; //class90Plus or class90Minus
-//	private double class90Plus;
-//	private double class90Minus;
 	private double[] ProbabilityOfClassH; 	//it depending on the number of true classes in the database
+	private int[] zero90Plus;
+	private int[] zero90Minus;
+	private int[] one90Plus;
+	private int[] one90Minus;
 	
 
 	public Naive_Bayes(int[] pointK, int[] clustersSizeK, double[] trueGradeMF, double[][] datasetMF, int numOfPointsMF, int numOfDimensionMF) {
@@ -49,6 +51,38 @@ public class Naive_Bayes {
 		
 		return ProbabilityOfClassH;
 	}
+	
+	
+	
+	//count instance X given class H
+	private void countInstanceX_givenClassH(){
+		for (int i = 0; i < numOfPoints; i++) {
+			for (int j = 0; j < numOfDimension; j++) {
+				if((dataset[i][j] == 0) && (trueGrade[i] >= 90)){
+					zero90Plus[i]++;
+				}
+				else if ((dataset[i][j] == 0) && (trueGrade[i] < 90)){
+					zero90Minus[i]++;
+				}
+				else if ((dataset[i][j] == 1) && (trueGrade[i] >= 90)){
+					one90Plus[i]++;
+				}
+				else if ((dataset[i][j] == 1) && (trueGrade[i] < 90)){
+					one90Minus[i]++;
+				}
+				else {
+					System.out.println("ERROR: value of attribute ["+i+"]["+j+"] is not equal to 0 or 1.");
+				}
+			}
+		}
+		
+	}
+	
+	//find probability of generating instance X given class H
+	private void findProbabilityInstanceX_givenClassH(){
+				
+	}
+	
 	
 
 }
