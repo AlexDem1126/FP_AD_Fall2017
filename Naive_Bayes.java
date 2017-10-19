@@ -15,6 +15,10 @@ public class Naive_Bayes {
 	private int[] zero90Minus;
 	private int[] one90Plus;
 	private int[] one90Minus;
+	private double prb_zero90Plus;
+	private double prb_zero90Minus;
+	private double prb_one90Plus;
+	private double prb_one90Minus;
 	
 
 	public Naive_Bayes(int[] pointK, int[] clustersSizeK, double[] trueGradeMF, double[][] datasetMF, int numOfPointsMF, int numOfDimensionMF) {
@@ -78,9 +82,16 @@ public class Naive_Bayes {
 		
 	}
 	
+	
+	
 	//find probability of generating instance X given class H
 	private void findProbabilityInstanceX_givenClassH(){
-				
+		for (int i = 0; i < numOfDimension; i++) {
+			prb_zero90Plus =  zero90Plus[i] / classType[0];
+			prb_zero90Minus =  zero90Minus[i] / classType[1];
+			prb_one90Plus =  one90Plus[i] / classType[0];
+			prb_one90Minus =  zero90Minus[i] / classType[1];							
+		}				
 	}
 	
 	
