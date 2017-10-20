@@ -19,8 +19,9 @@ public class Naive_Bayes {
 	private double[] prb_zero90Minus;
 	private double[] prb_one90Plus;
 	private double[] prb_one90Minus;
-	private double[] instanceX_beingInClass90Plus;
-	private double[] instanceX_beingInClass90Minus;
+//	private double[] instanceX_beingInClass90Plus;
+//	private double[] instanceX_beingInClass90Minus;
+	private double[] largest;
 	
 
 	public Naive_Bayes(int[] pointK, int[] clustersSizeK, double[] trueGradeMF, double[][] datasetMF, int numOfPointsMF, int numOfDimensionMF) {
@@ -112,10 +113,15 @@ public class Naive_Bayes {
 	
 	//4. P(H|X) = P(X|H)*P(H). find probability of instance X being in class H
 	private void findProbabilityInstanceX_beingInClassH(){
-		instanceX_beingInClass90Plus = new double[numOfDimension];
-		instanceX_beingInClass90Minus = new double[numOfDimension];
+		double[] instanceX_beingInClass90Plus = new double[numOfDimension];
+		double[] instanceX_beingInClass90Minus = new double[numOfDimension];
+		largest = new double[numOfPoints];
+//		double multiX_beingInClass90Plus;
+//		double multiX_beingInClass90Minus;
 				
 		for (int i = 0; i < numOfPoints; i++) {
+			double multiX_beingInClass90Plus = 0;
+			double multiX_beingInClass90Minus = 0;
 			for (int j = 0; j < numOfDimension; j++) {
 				if(dataset[i][j] == 0){
 					instanceX_beingInClass90Plus[j] = prb_zero90Plus[j];
@@ -129,9 +135,44 @@ public class Naive_Bayes {
 					System.out.println("ERROR_2: value of attribute ["+i+"]["+j+"] is not equal to 0 or 1.");
 				}
 			}
+			multiX_beingInClass90Plus = findMultiX_beingInClass90Plus(instanceX_beingInClass90Plus);
+			multiX_beingInClass90Minus = findMultiX_beingInClass90Minus(instanceX_beingInClass90Minus);		
+			largest[i] = findLargest(multiX_beingInClass90Plus, multiX_beingInClass90Minus);
+			System.out.println("STOP2");
 		}		
 	}
+
+
+
+	private double findLargest(double multiX_beingInClass90Plus, double multiX_beingInClass90Minus) {
+		double temp_largest = 0;
+		if(multiX_beingInClass90Plus > multiX_beingInClass90Minus){
+			temp_largest = 90;
+		}
+		else{
+			temp_largest = 89;
+		}
+		return temp_largest;
+	}
+
+
+	private double findMultiX_beingInClass90Plus(double[] instanceX_beingInClass90Plus) {
+		double temp_MultiX_InClass90Plus = 1;
+		for (int i = 0; i < numOfDimension; i++) {
+			temp_MultiX_InClass90Plus = temp_MultiX_InClass90Plus * instanceX_beingInClass90Plus[i];
+		}
+		return temp_MultiX_InClass90Plus;
+	}
+
 	
+	
+	private double findMultiX_beingInClass90Minus(double[] instanceX_beingInClass90Minus) {
+		double temp_MultiX_InClass90Minus = 1;
+		for (int i = 0; i < numOfDimension; i++) {
+			temp_MultiX_InClass90Minus = temp_MultiX_InClass90Minus * instanceX_beingInClass90Minus[i];
+		}
+		return temp_MultiX_InClass90Minus;
+	}
 	//in ProbabilityOfClassH[i] index 0 is class90Plus, index 1 is class90Minus;
 
 }
