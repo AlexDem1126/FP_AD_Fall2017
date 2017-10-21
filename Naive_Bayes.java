@@ -4,7 +4,7 @@ public class Naive_Bayes {
 	
 	private int[] point;
 	private int[] clustersSize;
-	private double[] trueGrade; //private double[][] trueGrade;
+	private double[] trueGrade;
 	private double[][] dataset;
 	private int numOfPoints;
 	private int numOfDimension;
@@ -19,9 +19,8 @@ public class Naive_Bayes {
 	private double[] prb_zero90Minus;
 	private double[] prb_one90Plus;
 	private double[] prb_one90Minus;
-//	private double[] instanceX_beingInClass90Plus;
-//	private double[] instanceX_beingInClass90Minus;
 	private double[] largest;
+	private double[] trueGradeTraining;
 	
 
 	public Naive_Bayes(int[] pointK, int[] clustersSizeK, double[] trueGradeMF, double[][] datasetMF, int numOfPointsMF, int numOfDimensionMF) {
@@ -35,10 +34,12 @@ public class Naive_Bayes {
 		countInstanceX_givenClassH();
 		findProbabilityInstanceX_givenClassH();	
 		findProbabilityInstanceX_beingInClassH();
+		trueGradeTraining = convertToTrueGradeTraining();
 		System.out.println("STOP");
 	}
 	
-	
+
+
 	//1. P(H) - find probability of occurrence of class H
 	private double[] findProbabilityOfClassH(){
 		classType = new double[numOfTrueClasses_H];
@@ -137,23 +138,10 @@ public class Naive_Bayes {
 			}
 			multiX_beingInClass90Plus = findMultiX_beingInClass90Plus(instanceX_beingInClass90Plus);
 			multiX_beingInClass90Minus = findMultiX_beingInClass90Minus(instanceX_beingInClass90Minus);		
-			largest[i] = findLargest(multiX_beingInClass90Plus, multiX_beingInClass90Minus);
-			System.out.println("STOP2");
+			largest[i] = findLargest(multiX_beingInClass90Plus, multiX_beingInClass90Minus);			
 		}		
 	}
 
-
-
-	private double findLargest(double multiX_beingInClass90Plus, double multiX_beingInClass90Minus) {
-		double temp_largest = 0;
-		if(multiX_beingInClass90Plus > multiX_beingInClass90Minus){
-			temp_largest = 90;
-		}
-		else{
-			temp_largest = 89;
-		}
-		return temp_largest;
-	}
 
 
 	private double findMultiX_beingInClass90Plus(double[] instanceX_beingInClass90Plus) {
@@ -172,6 +160,35 @@ public class Naive_Bayes {
 			temp_MultiX_InClass90Minus = temp_MultiX_InClass90Minus * instanceX_beingInClass90Minus[i];
 		}
 		return temp_MultiX_InClass90Minus;
+	}
+	
+	
+	
+	private double findLargest(double multiX_beingInClass90Plus, double multiX_beingInClass90Minus) {
+		double temp_largest = 0;
+		if(multiX_beingInClass90Plus > multiX_beingInClass90Minus){
+			temp_largest = 90;
+		}
+		else{
+			temp_largest = 89;
+		}
+		return temp_largest;
+	}
+	
+	
+	
+	private double[] convertToTrueGradeTraining() {
+		double[] trueGradeTraining_F = new double[numOfPoints];
+		for (int i = 0; i < numOfPoints; i++) {			
+			if(trueGrade[i] >= 90){
+				trueGradeTraining_F[i] = 90;
+			}
+			else{
+				trueGradeTraining_F[i] = 89;
+			}
+		}
+		System.out.println("STOP2");
+		return trueGradeTraining_F;
 	}
 	//in ProbabilityOfClassH[i] index 0 is class90Plus, index 1 is class90Minus;
 
