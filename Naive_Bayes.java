@@ -21,7 +21,10 @@ public class Naive_Bayes {
 	private double[] prb_one90Minus;
 	private double[] largest;
 	private double[] trueGradeTraining;
-	
+	private double TP;	//TP is True Positive 
+	private double FP;	//FP is False Positive 
+	private double FN;	//FN is False Negative 
+	private double TN;	//TN is True Negative 
 
 	public Naive_Bayes(int[] pointK, int[] clustersSizeK, double[] trueGradeMF, double[][] datasetMF, int numOfPointsMF, int numOfDimensionMF) {
 		point = pointK;
@@ -35,6 +38,7 @@ public class Naive_Bayes {
 		findProbabilityInstanceX_givenClassH();	
 		findProbabilityInstanceX_beingInClassH();
 		trueGradeTraining = convertToTrueGradeTraining();
+		countTP_FP_FN_TN();
 		System.out.println("STOP");
 	}
 	
@@ -186,9 +190,32 @@ public class Naive_Bayes {
 			else{
 				trueGradeTraining_F[i] = 89;
 			}
+		}		
+		return trueGradeTraining_F;
+	}
+	
+	
+	
+	private void countTP_FP_FN_TN() {
+		TP = 0;	//TP is True Positive 
+		FP = 0;	//FP is False Positive 
+		FN = 0;	//FN is False Negative 
+		TN = 0;	//TN is True Negative
+		for (int i = 0; i < numOfPoints; i++) {	
+			if(trueGradeTraining[i] == largest[i]){
+				TP++; //Prediction was positive +1, and in reality the value was +1
+			}
+			else if (trueGradeTraining[i] < largest[i]) {
+				FP++; //Prediction was positive +1, but in reality the value was -1
+			}
+			else if (trueGradeTraining[i] > largest[i]) {
+				FN++; //Prediction was negative -1, but in reality the value was +1
+			}
+			else {
+				TN++; //Prediction was negative -1, but in reality the value was -1
+			}
 		}
 		System.out.println("STOP2");
-		return trueGradeTraining_F;
 	}
 	//in ProbabilityOfClassH[i] index 0 is class90Plus, index 1 is class90Minus;
 
