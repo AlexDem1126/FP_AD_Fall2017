@@ -25,6 +25,7 @@ public class Naive_Bayes {
 	private double FP;	//FP is False Positive 
 	private double FN;	//FN is False Negative 
 	private double TN;	//TN is True Negative 
+	private double accuracyTraining;
 
 	public Naive_Bayes(int[] pointK, int[] clustersSizeK, double[] trueGradeMF, double[][] datasetMF, int numOfPointsMF, int numOfDimensionMF) {
 		point = pointK;
@@ -39,6 +40,7 @@ public class Naive_Bayes {
 		findProbabilityInstanceX_beingInClassH();
 		trueGradeTraining = convertToTrueGradeTraining();
 		countTP_FP_FN_TN();
+		accuracyTraining = findAccuracyTraining();
 		System.out.println("STOP");
 	}
 	
@@ -214,8 +216,16 @@ public class Naive_Bayes {
 			else {
 				TN++; //Prediction was negative -1, but in reality the value was -1
 			}
-		}
-		System.out.println("STOP2");
+		}		
+	}
+	
+	
+	
+	private double findAccuracyTraining() {
+		double AccuracyTraining_F = 0;
+		AccuracyTraining_F = (TP + TN)/(TP + TN + FP + FN);	
+		System.out.println("Accuracy of training dataset: " + AccuracyTraining_F*100 +"%");
+		return AccuracyTraining_F;
 	}
 	//in ProbabilityOfClassH[i] index 0 is class90Plus, index 1 is class90Minus;
 
