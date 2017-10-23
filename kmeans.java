@@ -13,6 +13,7 @@ public class kmeans {
 	private int[] point;
 	private double[][] centroidsAttrAverage;
 	private double[] Attributes_Average;
+	private int[] cSize; //clusters Size
 
 	
 	public int[] getPoint() {
@@ -21,6 +22,15 @@ public class kmeans {
 	public void setPoint(int[] point) {
 		this.point = point;
 	}
+	
+	
+	public int[] getcSize() {
+		return cSize;
+	}
+	public void setcSize(int[] cSize) {
+		this.cSize = cSize;
+	}
+	
 	
 	
 	public kmeans(double[][] datasetMF, int numOfPointsMF, int numOfDimensionMF) {
@@ -333,9 +343,9 @@ public class kmeans {
 		
 		
 		
-		//count number of points in clusters
+		//count number of points in clusters 
 		private void clustersSize(int[] point2) {
-			int[] cSize = new int[numOfClusters];
+			cSize = new int[numOfClusters];
 			for (int i = 0; i < numOfPoints; i++) {
 				int cSizeCount = -1;
 				while(point[i] != cSizeCount){
