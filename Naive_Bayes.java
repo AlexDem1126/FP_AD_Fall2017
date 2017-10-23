@@ -1,5 +1,7 @@
 package FP_AD_Fall2017;
 
+import java.util.HashSet;
+
 public class Naive_Bayes {
 	
 	private int[] point;
@@ -26,6 +28,8 @@ public class Naive_Bayes {
 	private double FN;	//FN is False Negative 
 	private double TN;	//TN is True Negative 
 	private double accuracyTraining;
+	private int ls = 1; //Laplace smoothing number
+	private int[] numOfPossibleValuesX;
 
 	public Naive_Bayes(int[] pointK, int[] clustersSizeK, double[] trueGradeMF, double[][] datasetMF, int numOfPointsMF, int numOfDimensionMF) {
 		point = pointK;
@@ -36,6 +40,7 @@ public class Naive_Bayes {
 		numOfDimension = numOfDimensionMF;
 		ProbabilityOfClassH = findProbabilityOfClassH();
 		countInstanceX_givenClassH();
+		findNumOfPossibleValuesX();
 		findProbabilityInstanceX_givenClassH();	
 		findProbabilityInstanceX_beingInClassH();
 		trueGradeTraining = convertToTrueGradeTraining();
@@ -63,7 +68,7 @@ public class Naive_Bayes {
 		
 		ProbabilityOfClassH = new double[numOfTrueClasses_H];
 		for (int i = 0; i < numOfTrueClasses_H; i++) {	
-			ProbabilityOfClassH[i] = classType[i] / numOfPoints; 
+			ProbabilityOfClassH[i] = (classType[i] + ls) / (numOfPoints + (ls * numOfTrueClasses_H)); 
 			System.out.println("Probability Of ClassH "+i +": " + ProbabilityOfClassH[i]);
 		}
 		
@@ -77,7 +82,7 @@ public class Naive_Bayes {
 		zero90Plus = new int[numOfDimension];
 		zero90Minus = new int[numOfDimension];
 		one90Plus = new int[numOfDimension];
-		one90Minus = new int[numOfDimension];
+		one90Minus = new int[numOfDimension];		
 		for (int i = 0; i < numOfPoints; i++) {
 			for (int j = 0; j < numOfDimension; j++) {
 				if((dataset[i][j] == 0) && (trueGrade[i] >= 90)){
@@ -102,6 +107,23 @@ public class Naive_Bayes {
 	
 	
 	
+	private void findNumOfPossibleValuesX(){
+		numOfPossibleValuesX = new int[numOfDimension];		
+		int j = 0;
+		while(j < numOfDimension){
+			HashSet<Integer> set = new HashSet<>();
+			for (int i = 0; i < numOfPoints; i++) {
+				if (!set.contains((int) dataset[i][j])){
+					set.add((int) dataset[i][j]);
+					numOfPossibleValuesX[j] = set.size();
+		        }
+			}
+			j++;
+		}
+	}
+	
+	
+	
 	//3. P(X|H) - find probability of generating instance X given class H
 	private void findProbabilityInstanceX_givenClassH(){		
 		prb_zero90Plus = new double[numOfDimension];
@@ -109,10 +131,10 @@ public class Naive_Bayes {
 		prb_one90Plus = new double[numOfDimension];
 		prb_one90Minus = new double[numOfDimension];
 		for (int i = 0; i < numOfDimension; i++) {
-			prb_zero90Plus[i] = zero90Plus[i] / classType[0];
-			prb_zero90Minus[i] = zero90Minus[i] / classType[0];
-			prb_one90Plus[i] =  one90Plus[i] / classType[1];
-			prb_one90Minus[i] =  one90Minus[i] / classType[1];							
+			prb_zero90Plus[i] = (zero90Plus[i] + ls) / (classType[0] + (ls * numOfPossibleValuesX[i]));
+			prb_zero90Minus[i] = (zero90Minus[i] + ls) / (classType[0] + (ls * numOfPossibleValuesX[i]));
+			prb_one90Plus[i] =  (one90Plus[i] + ls) / (classType[1] + (ls * numOfPossibleValuesX[i]));
+			prb_one90Minus[i] =  (one90Minus[i] + ls) / (classType[1] + (ls * numOfPossibleValuesX[i]));							
 		}				
 	}
 	
