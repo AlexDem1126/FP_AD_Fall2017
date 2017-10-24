@@ -54,8 +54,7 @@ public class Naive_Bayes {
 		findProbabilityInstanceX_beingInClassH();
 		trueGradeTraining = convertTrueGradeTo90and89();
 		countTP_FP_FN_TN();
-		accuracyTraining = findAccuracyTraining();
-		System.out.println("STOP");
+		accuracyTraining = findAccuracyTraining();		
 	}
 	
 
@@ -290,6 +289,8 @@ public class Naive_Bayes {
 		}
 		trueGrade_Test_90and89 = convertTrueGrade_Test_To90and89(numOfPointsTest_F, trueGradeTest_F);
 		countTP_FP_FN_TN_Test(numOfPointsTest_F);
+		accuracy_Test = findAccuracyTest();
+		System.out.println("STOP");
 	}	
 	
 	
@@ -328,6 +329,15 @@ public class Naive_Bayes {
 				TN++; //Prediction was negative -1, but in reality the value was -1
 			}
 		}		
+	}
+	
+	
+	
+	private double findAccuracyTest() {
+		double AccuracyTest_F = 0;
+		AccuracyTest_F = (TP + TN)/(TP + TN + FP + FN);	
+		System.out.println("Accuracy of testing dataset: " + AccuracyTest_F*100 +"%");
+		return AccuracyTest_F;
 	}
 
 
