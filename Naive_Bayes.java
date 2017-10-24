@@ -22,15 +22,23 @@ public class Naive_Bayes {
 	private double[] prb_one90Plus;
 	private double[] prb_one90Minus;
 	private double[] largest;
+	private double[] largest_Test;
 	private double[] trueGradeTraining;
+	private double[] trueGrade_Test;
 	private double TP;	//TP is True Positive 
 	private double FP;	//FP is False Positive 
 	private double FN;	//FN is False Negative 
 	private double TN;	//TN is True Negative 
 	private double accuracyTraining;
+	private double accuracy_Test;
 	private int ls = 1; //Laplace smoothing number
 	private int[] numOfPossibleValuesX;
+	
 
+	
+	//******************************************************************
+	/*********** Training Naive Bayes Classifier ***********/
+	//******************************************************************
 	public Naive_Bayes(int[] pointK, int[] clustersSizeK, double[] trueGradeMF, double[][] datasetMF, int numOfPointsMF, int numOfDimensionMF) {
 		point = pointK;
 		clustersSize = clustersSizeK;
@@ -43,7 +51,7 @@ public class Naive_Bayes {
 		findNumOfPossibleValuesX();
 		findProbabilityInstanceX_givenClassH();	
 		findProbabilityInstanceX_beingInClassH();
-		trueGradeTraining = convertToTrueGradeTraining();
+		trueGradeTraining = convertTrueGradeTo90and89();
 		countTP_FP_FN_TN();
 		accuracyTraining = findAccuracyTraining();
 		System.out.println("STOP");
@@ -145,8 +153,6 @@ public class Naive_Bayes {
 		double[] instanceX_beingInClass90Plus = new double[numOfDimension];
 		double[] instanceX_beingInClass90Minus = new double[numOfDimension];
 		largest = new double[numOfPoints];
-//		double multiX_beingInClass90Plus;
-//		double multiX_beingInClass90Minus;
 				
 		for (int i = 0; i < numOfPoints; i++) {
 			double multiX_beingInClass90Plus = 0;
@@ -205,17 +211,17 @@ public class Naive_Bayes {
 	
 	
 	
-	private double[] convertToTrueGradeTraining() {
-		double[] trueGradeTraining_F = new double[numOfPoints];
+	private double[] convertTrueGradeTo90and89() {
+		double[] trueGrade90and89_F = new double[numOfPoints];
 		for (int i = 0; i < numOfPoints; i++) {			
 			if(trueGrade[i] >= 90){
-				trueGradeTraining_F[i] = 90;
+				trueGrade90and89_F[i] = 90;
 			}
 			else{
-				trueGradeTraining_F[i] = 89;
+				trueGrade90and89_F[i] = 89;
 			}
 		}		
-		return trueGradeTraining_F;
+		return trueGrade90and89_F;
 	}
 	
 	
@@ -249,6 +255,40 @@ public class Naive_Bayes {
 		System.out.println("Accuracy of training dataset: " + AccuracyTraining_F*100 +"%");
 		return AccuracyTraining_F;
 	}
-	//in ProbabilityOfClassH[i] index 0 is class90Plus, index 1 is class90Minus;
+
+
+	
+	//******************************************************************
+	/*********** Test Naive Bayes Classifier ***********/
+	//******************************************************************		
+	public void Naive_Bayes_Test(double[][] datasetTest_F, double[] trueGradeTest_F, int numOfPointsTest_F) {
+		double[] instanceX_beingInClass90Plus_Test = new double[numOfDimension];
+		double[] instanceX_beingInClass90Minus_Test = new double[numOfDimension];
+		largest_Test = new double[numOfPointsTest_F];
+				
+		for (int i = 0; i < numOfPointsTest_F; i++) {
+			double multiX_beingInClass90Plus_Test = 0;
+			double multiX_beingInClass90Minus_Test = 0;
+			for (int j = 0; j < numOfDimension; j++) {
+				if(datasetTest_F[i][j] == 0){
+					instanceX_beingInClass90Plus_Test[j] = prb_zero90Plus[j];
+					instanceX_beingInClass90Minus_Test[j] = prb_zero90Minus[j];
+				}				
+				else if (datasetTest_F[i][j] == 1) {
+					instanceX_beingInClass90Plus_Test[j] = prb_one90Plus[j];
+					instanceX_beingInClass90Minus_Test[j] = prb_one90Minus[j];
+				}
+				else {
+					System.out.println("ERROR_3: value of attribute ["+i+"]["+j+"] is not equal to 0 or 1.");
+				}
+			}
+			multiX_beingInClass90Plus_Test = findMultiX_beingInClass90Plus(instanceX_beingInClass90Plus_Test);
+			multiX_beingInClass90Minus_Test = findMultiX_beingInClass90Minus(instanceX_beingInClass90Minus_Test);		
+			largest_Test[i] = findLargest(multiX_beingInClass90Plus_Test, multiX_beingInClass90Minus_Test);			
+		}
+		trueGrade_Test = convertTrueGradeTo90and89();
+	}	
+
+
 
 }
