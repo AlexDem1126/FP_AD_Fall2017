@@ -289,6 +289,7 @@ public class Naive_Bayes {
 			largest_Test[i] = findLargest(multiX_beingInClass90Plus_Test, multiX_beingInClass90Minus_Test);			
 		}
 		trueGrade_Test_90and89 = convertTrueGrade_Test_To90and89(numOfPointsTest_F, trueGradeTest_F);
+		countTP_FP_FN_TN_Test(numOfPointsTest_F);
 	}	
 	
 	
@@ -304,6 +305,29 @@ public class Naive_Bayes {
 			}
 		}		
 		return trueGrade90and89_F;
+	}
+	
+	
+	
+	private void countTP_FP_FN_TN_Test(int numOfPointsTest_F) {
+		TP = 0;	//TP is True Positive 
+		FP = 0;	//FP is False Positive 
+		FN = 0;	//FN is False Negative 
+		TN = 0;	//TN is True Negative
+		for (int i = 0; i < numOfPointsTest_F; i++) {	
+			if(trueGrade_Test_90and89[i] == largest_Test[i]){
+				TP++; //Prediction was positive +1, and in reality the value was +1
+			}
+			else if (trueGrade_Test_90and89[i] < largest_Test[i]) {
+				FP++; //Prediction was positive +1, but in reality the value was -1
+			}
+			else if (trueGrade_Test_90and89[i] > largest_Test[i]) {
+				FN++; //Prediction was negative -1, but in reality the value was +1
+			}
+			else {
+				TN++; //Prediction was negative -1, but in reality the value was -1
+			}
+		}		
 	}
 
 
