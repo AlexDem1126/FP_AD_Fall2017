@@ -24,7 +24,7 @@ public class Naive_Bayes {
 	private double[] largest;
 	private double[] largest_Test;
 	private double[] trueGradeTraining;
-	private double[] trueGrade_Test;
+	private double[] trueGrade_Test_90and89;
 	private double TP;	//TP is True Positive 
 	private double FP;	//FP is False Positive 
 	private double FN;	//FN is False Negative 
@@ -33,6 +33,7 @@ public class Naive_Bayes {
 	private double accuracy_Test;
 	private int ls = 1; //Laplace smoothing number
 	private int[] numOfPossibleValuesX;
+	
 	
 
 	
@@ -262,6 +263,7 @@ public class Naive_Bayes {
 	/*********** Test Naive Bayes Classifier ***********/
 	//******************************************************************		
 	public void Naive_Bayes_Test(double[][] datasetTest_F, double[] trueGradeTest_F, int numOfPointsTest_F) {
+//		trueGrade_Test = trueGradeTest_F;
 		double[] instanceX_beingInClass90Plus_Test = new double[numOfDimension];
 		double[] instanceX_beingInClass90Minus_Test = new double[numOfDimension];
 		largest_Test = new double[numOfPointsTest_F];
@@ -286,8 +288,23 @@ public class Naive_Bayes {
 			multiX_beingInClass90Minus_Test = findMultiX_beingInClass90Minus(instanceX_beingInClass90Minus_Test);		
 			largest_Test[i] = findLargest(multiX_beingInClass90Plus_Test, multiX_beingInClass90Minus_Test);			
 		}
-		trueGrade_Test = convertTrueGradeTo90and89();
+		trueGrade_Test_90and89 = convertTrueGrade_Test_To90and89(numOfPointsTest_F, trueGradeTest_F);
 	}	
+	
+	
+	
+	private double[] convertTrueGrade_Test_To90and89(int numOfPointsTest_F, double[] trueGradeTest_F) {
+		double[] trueGrade90and89_F = new double[numOfPoints];
+		for (int i = 0; i < numOfPointsTest_F; i++) {			
+			if(trueGradeTest_F[i] >= 90){
+				trueGrade90and89_F[i] = 90;
+			}
+			else{
+				trueGrade90and89_F[i] = 89;
+			}
+		}		
+		return trueGrade90and89_F;
+	}
 
 
 
