@@ -12,114 +12,114 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class manageFile_A {
-	public String fileName;
-	private int numOfPoints;
-	private int numOfPointsTest;
-	private int numOfDimension;	
-	private String[] wineName;
-	private String[] wineNameTest;
-	private double[][] dataset;
-	private double[][] datasetTest;
-	private int[] vintage;
-	private int[] vintageTest;
-	private double[] trueGrade;
-	private double[] trueGradeTest;
-	private int foldNumber;
+	public String fileNameMF;
+	private int numOfPointsMF;
+	private int numOfPointsTestMF;
+	private int numOfDimensionMF;	
+	private String[] wineNameMF;
+	private String[] wineNameTestMF;
+	private double[][] datasetMF;
+	private double[][] datasetTestMF;
+	private int[] vintageMF;
+	private int[] vintageTestMF;
+	private double[] trueGradeMF;
+	private double[] trueGradeTestMF;
+	private int foldNumberMF;
 			
 	
 				
 	public int getNumOfPoints() {
-		return numOfPoints;
+		return numOfPointsMF;
 	}
 	public void setNumOfPoints(int numOfPoints) {
-		this.numOfPoints = numOfPoints;
+		this.numOfPointsMF = numOfPoints;
 	}
 
 	
 	public int getNumOfDimension() {
-		return numOfDimension;
+		return numOfDimensionMF;
 	}
 	public void setNumOfDimension(int numOfDimension) {
-		this.numOfDimension = numOfDimension;
+		this.numOfDimensionMF = numOfDimension;
 	}
 
 	
 	public String[] getWineName() { 
-		return wineName;
+		return wineNameMF;
 	}
 	public void setWineName(String[] wineName) { 
-		this.wineName = wineName;
+		this.wineNameMF = wineName;
 	}
 
 	
 	public int[] getVintage() { 
-		return vintage;
+		return vintageMF;
 	}
 	public void setVintage(int[] vintage) { 
-		this.vintage = vintage;
+		this.vintageMF = vintage;
 	}
 
 	
 	public double[] getTrueGrade() { 
-		return trueGrade;
+		return trueGradeMF;
 	}
 	public void setTrueGrade(double[] trueGrade) { 
-		this.trueGrade = trueGrade;
+		this.trueGradeMF = trueGrade;
 	}
 
 	
 	public double[][] getDataset() {
-		return dataset;
+		return datasetMF;
 	}
 	public void setDataset(double[][] dataset) {
-		this.dataset = dataset;
+		this.datasetMF = dataset;
 	}
 
 	
 	public int getNumOfPointsTest() {
-		return numOfPointsTest;
+		return numOfPointsTestMF;
 	}
 	public void setNumOfPointsTest(int numOfPointsTest) {
-		this.numOfPointsTest = numOfPointsTest;
+		this.numOfPointsTestMF = numOfPointsTest;
 	}
 	
 	
 	public String[] getWineNameTest() {
-		return wineNameTest;
+		return wineNameTestMF;
 	}
 	public void setWineNameTest(String[] wineNameTest) {
-		this.wineNameTest = wineNameTest;
+		this.wineNameTestMF = wineNameTest;
 	}
 	
 	
 	public double[][] getDatasetTest() {
-		return datasetTest;
+		return datasetTestMF;
 	}
 	public void setDatasetTest(double[][] datasetTest) {
-		this.datasetTest = datasetTest;
+		this.datasetTestMF = datasetTest;
 	}
 	
 	
 	public int[] getVintageTest() {
-		return vintageTest;
+		return vintageTestMF;
 	}
 	public void setVintageTest(int[] vintageTest) {
-		this.vintageTest = vintageTest;
+		this.vintageTestMF = vintageTest;
 	}
 	
 	
 	public double[] getTrueGradeTest() {
-		return trueGradeTest;
+		return trueGradeTestMF;
 	}
 	public void setTrueGradeTest(double[] trueGradeTest) {
-		this.trueGradeTest = trueGradeTest;
+		this.trueGradeTestMF = trueGradeTest;
 	}
 	
 	
 	
 public manageFile_A(String fileName2, int numOfFolds2) {
-	fileName = fileName2;
-	foldNumber = numOfFolds2; //foldNumber
+	fileNameMF = fileName2;
+	foldNumberMF = numOfFolds2; 
 	int instanceIndex_A = 0;
 	BufferedReader br;
 	ArrayList<String> fileData_L_temp;
@@ -127,15 +127,14 @@ public manageFile_A(String fileName2, int numOfFolds2) {
 		// read data from a file
 		try {
 			//get a number of rows and columns
-			br = new BufferedReader(new FileReader(fileName));
+			br = new BufferedReader(new FileReader(fileNameMF));
             String line = "";
-//            line = br.readLine();
             int numOfColumns=0, numOfRows=0, numOfRows_test = 0;
             
-            while ((line = br.readLine()) != null) {//br.readLine() != null
+            while ((line = br.readLine()) != null) {
             	String[] line_temp = line.split(",");            	
             	numOfColumns = line_temp.length;
-            	if(instanceIndex_A % 2 == foldNumber){
+            	if(instanceIndex_A % 5 == foldNumberMF){
             		numOfRows_test++;
             	}
             	else{
@@ -151,32 +150,32 @@ public manageFile_A(String fileName2, int numOfFolds2) {
             
             
          // read whole file and store names in the wineName, data attributes in the dataset, years in vintage, labels in the trueGrade
-         			br = new BufferedReader(new FileReader(fileName));      
+         			br = new BufferedReader(new FileReader(fileNameMF));      
          			fileData_L_temp =  new ArrayList<String>();         			
          			
-         			wineName = new String[numOfRows]; 
-         			wineNameTest = new String[numOfRows_test]; 
+         			wineNameMF = new String[numOfRows]; 
+         			wineNameTestMF = new String[numOfRows_test]; 
        			
-         			dataset = new double[numOfRows][];
+         			datasetMF = new double[numOfRows][];
          			for (int i = 0; i < (numOfRows); i++) {
-         				dataset[i] = new double[numOfColumns-3];				
+         				datasetMF[i] = new double[numOfColumns-3];				
         			}	
          			
-         			datasetTest = new double[numOfRows_test][];
+         			datasetTestMF = new double[numOfRows_test][];
          			for (int i = 0; i < numOfRows_test; i++) {
-         				datasetTest[i] = new double[numOfColumns-3];				
+         				datasetTestMF[i] = new double[numOfColumns-3];				
         			}	
          			
-         			numOfPoints = numOfRows;
-         			numOfPointsTest = numOfRows_test;
+         			numOfPointsMF = numOfRows;
+         			numOfPointsTestMF = numOfRows_test;
          			
-         			numOfDimension = numOfColumns-3;
+         			numOfDimensionMF = numOfColumns-3;
          			
-         			vintage = new int[numOfRows];
-         			vintageTest = new int[numOfRows_test];
+         			vintageMF = new int[numOfRows];
+         			vintageTestMF = new int[numOfRows_test];
          			
-         			trueGrade = new double[numOfRows];
-         			trueGradeTest = new double[numOfRows_test];
+         			trueGradeMF = new double[numOfRows];
+         			trueGradeTestMF = new double[numOfRows_test];
 	
 
          			
@@ -197,38 +196,35 @@ public manageFile_A(String fileName2, int numOfFolds2) {
                     		i2++;                    		                    		
                     	}
                     	
-                    	if(instanceIndex_B % 2 == foldNumber){
-                    		wineNameTest[nrowTest] = line_temp2[0];
-                    		datasetTest[nrowTest] = line2;
-//                    		vintageTest[nrowTest] = Integer.parseInt(line_temp2[6]); 
-//                    		trueGradeTest[nrowTest] = Double.parseDouble(line_temp2[7]);  
-                        	vintageTest[nrowTest] = Integer.parseInt(line_temp2[306]);
-                        	trueGradeTest[nrowTest] = Double.parseDouble(line_temp2[307]);
+                    	if(instanceIndex_B % 5 == foldNumberMF){
+                    		wineNameTestMF[nrowTest] = line_temp2[0];
+                    		datasetTestMF[nrowTest] = line2;  
+                        	vintageTestMF[nrowTest] = Integer.parseInt(line_temp2[numOfColumns-2]); 
+                        	trueGradeTestMF[nrowTest] = Double.parseDouble(line_temp2[numOfColumns-1]); 
                     		nrowTest++; 
+//                    		System.out.println(instanceIndex_B + " Test ");
                     	}
                     	else{
-                    		wineName[nrow] = line_temp2[0];
-                    		dataset[nrow] = line2; 
-//                    		vin`tage[nrow] = Integer.parseInt(line_temp2[6]); 
-//                        	trueGrade[nrow] = Double.parseDouble(line_temp2[7]);  
-                        	vintage[nrow] = Integer.parseInt(line_temp2[306]);
-                        	trueGrade[nrow] = Double.parseDouble(line_temp2[307]); 
+                    		wineNameMF[nrow] = line_temp2[0];
+                    		datasetMF[nrow] = line2; 
+                        	vintageMF[nrow] = Integer.parseInt(line_temp2[numOfColumns-2]); 
+                        	trueGradeMF[nrow] = Double.parseDouble(line_temp2[numOfColumns-1]); 
                         	nrow++;
+//                        	System.out.println(instanceIndex_B + " Training");
                     	} 	                     	                  	
                     	instanceIndex_B++;
-                    }
-        			
+                    }                    
 //        			printFile(dataset); //print data from file                  
 //                  printTestFile(datasetTest); //print testing data from file
                     br.close();
                     fileData_L_temp.clear();        
 	
 		} catch (FileNotFoundException e) {
-			System.out.println("Can not find file " + fileName);
+			System.out.println("Can not find file " + fileNameMF);
 			System.exit(0);
 			
 		} catch (IOException e) {
-			System.out.println("Can not read file " + fileName);
+			System.out.println("Can not read file " + fileNameMF);
 			System.exit(0);
 			
 		} catch (Exception e) {
@@ -242,8 +238,8 @@ public manageFile_A(String fileName2, int numOfFolds2) {
 
 	public void printTestFile(double[][] datasetTest_F){
 		// print multi-dimensional array
-		for (int i = 0; i < numOfPointsTest; i++) {
-			for (int j = 0; j < numOfDimension; j++) {
+		for (int i = 0; i < numOfPointsTestMF; i++) {
+			for (int j = 0; j < numOfDimensionMF; j++) {
 				System.out.print("["+i+"]["+j+"]" + datasetTest_F[i][j] + " ");
 			}
 			System.out.println();
@@ -253,8 +249,8 @@ public manageFile_A(String fileName2, int numOfFolds2) {
 
 	public void printFile(double[][] datasetF){
 		// print multi-dimensional array
-		for (int i = 0; i < numOfPoints; i++) {
-			for (int j = 0; j < numOfDimension; j++) {
+		for (int i = 0; i < numOfPointsMF; i++) {
+			for (int j = 0; j < numOfDimensionMF; j++) {
 				System.out.print("["+i+"]["+j+"]" + datasetF[i][j] + " ");
 			}
 			System.out.println();
@@ -263,7 +259,7 @@ public manageFile_A(String fileName2, int numOfFolds2) {
 	
 	
 	
-	public void writeDatasetToFile(double[][] outputDataset, String datasetName) {
+	public void writeDatasetToFile(double[][] outputDataset, String datasetName, int nfolds, int numOfPoints_output) { 
 		File output_File = new File("output_dataset.txt"); 
 		BufferedWriter bw = null; 
 		try {			
@@ -274,12 +270,24 @@ public manageFile_A(String fileName2, int numOfFolds2) {
 			
 			//if true = append file
 			bw = new BufferedWriter(new FileWriter(output_File.getAbsolutePath(),true)); 
-			bw.write(datasetName);
+			bw.write(datasetName + " - fold " + nfolds);
 			bw.write(System.getProperty("line.separator"));
-			for (int i = 0; i < numOfPoints; i++) {
-				for (int j = 0; j < numOfDimension; j++) {
-					bw.write("["+i+"]["+j+"]" + outputDataset[i][j] + " ");
+			for (int i = 0; i < numOfPoints_output; i++) {
+				bw.write("Item #{"+i+"}");
+				for (int j = 0; j < numOfDimensionMF; j++) {					
+					bw.write("["+i+"]["+j+"]" + outputDataset[i][j] +" ");					
 				}
+				
+//				if(originalGrade[i] >= 90 && convertedGrade_89and90[i] == 90){
+//					
+//				}
+//				else if (originalGrade[i] < 90 && convertedGrade_89and90[i] == 89){
+//					
+//				}
+//				else {
+//					bw.write("ERROR: converting original grade to 89 and 90");
+//				}
+				
 				bw.write(System.getProperty("line.separator"));
 			}			
 			
