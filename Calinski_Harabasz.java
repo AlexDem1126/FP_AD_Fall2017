@@ -79,21 +79,21 @@ public class Calinski_Harabasz {
 			iterationConverges++;	
 				
 				if(sSW==newSSW){
-					System.out.println("Iteration " + iterationConverges + ": " + "sSW = "+ sSW +", sSB = "+ sSB);
+//					System.out.println("Iteration " + iterationConverges + ": " + "sSW = "+ sSW +", sSB = "+ sSB);
 					
 					//count number of points in clusters - Final
 					clustersSize(point);
-					System.out.println("\nFinal SSW: " + sSW);
-					System.out.println("Final SSB: " + sSB);
+//					System.out.println("\nFinal SSW: " + sSW);
+//					System.out.println("Final SSB: " + sSB);
 					break;
 				}else{
-					System.out.println("Iteration " + iterationConverges + ": " + "sSW = "+ newSSW +", sSB = "+ sSB);
+//					System.out.println("Iteration " + iterationConverges + ": " + "sSW = "+ newSSW +", sSB = "+ sSB);
 				}			
 				if ((newSSW < threshold) || ((nIterations > 0) && (iterationConverges >= nIterations))) {
 					break;
 				}
 		}
-		System.out.println("Converges at iteration " + iterationConverges + "\n");			
+//		System.out.println("Converges at iteration " + iterationConverges + "\n");			
 	}
 	
 	
@@ -335,10 +335,10 @@ public class Calinski_Harabasz {
 				cSize[cSizeCount]++;
 			}
 			
-			System.out.print("\nClusters Size: ");
-			for (int i = 0; i < numOfClusters; i++) {
-				System.out.print(cSize[i] +" ");
-			}
+//			System.out.print("Clusters Size: ");
+//			for (int i = 0; i < numOfClusters; i++) {
+//				System.out.print(cSize[i] +" ");
+//			}
 		}
 
 
