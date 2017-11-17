@@ -14,6 +14,7 @@ public class kmeans {
 	private double[][] centroidsAttrAverage;
 	private double[] Attributes_Average;
 	private int[] cSize; //clusters Size
+	private double sse_final_K;
 
 	
 	public int[] getPoint() {
@@ -29,6 +30,15 @@ public class kmeans {
 	}
 	public void setcSize(int[] cSize) {
 		this.cSize = cSize;
+	}
+	
+	
+	
+	public double getSse_final_K() {
+		return sse_final_K;
+	}
+	public void setSse_final_K(double sse_final_K) {
+		this.sse_final_K = sse_final_K;
 	}
 	
 	
@@ -92,7 +102,7 @@ public class kmeans {
 			}	
 			
 			//display Points of Dataset
-			displayUpdatedPoints(point);
+//			displayUpdatedPoints(point);
 			
 			//count number of points in clusters
 			clustersSize(point);
@@ -107,21 +117,25 @@ public class kmeans {
 			iterationConverges++;	
 				
 				if(SSE==newSSE){
-					System.out.println("\n\nIteration " + iterationConverges + ": " + SSE);
+//					System.out.println("\n\nIteration " + iterationConverges + ": " + SSE);
 					//display updatedCentroids - Final
-					displayUpdatedCentroidsAttr(updatedCentroids);
+//					displayUpdatedCentroidsAttr(updatedCentroids);
 					
-					//display Points of Dataset - Final
-					displayUpdatedPoints(point);
+//					//display Points of Dataset - Final
+//					displayUpdatedPoints(point);
 					
 					//count number of points in clusters - Final
-					clustersSize(point);
-					System.out.println("\n\nFinal SSE: " + SSE);
+//					clustersSize(point);
+					
+					//display clusters Size (number of points in clusters - Final)
+					displayClustersSize();
+					System.out.println("\nFinal SSE: " + SSE);
+					sse_final_K = SSE;
 					break;
 				}else{
-					System.out.println("\n\nIteration " + iterationConverges + ": " + newSSE);
+//					System.out.println("\n\nIteration " + iterationConverges + ": " + newSSE);
 					//display updatedCentroids
-					displayUpdatedCentroidsAttr(updatedCentroids);	
+//					displayUpdatedCentroidsAttr(updatedCentroids);	
 					
 
 				}			
@@ -131,7 +145,6 @@ public class kmeans {
 		}
 		System.out.println("Converges at iteration " + iterationConverges + "\n");			
 	}
-
 
 
 
@@ -158,7 +171,7 @@ public class kmeans {
 			}
 //			System.out.println();
 		}
-		System.out.println("Random Centroids: " + centrdData);
+//		System.out.println("Random Centroids: " + centrdData);
 		return centroids;
 	}
 	
@@ -354,10 +367,20 @@ public class kmeans {
 				cSize[cSizeCount]++;
 			}
 			
-			System.out.print("\nClusters Size: ");
+//			System.out.print("\nClusters Size: ");
+//			for (int i = 0; i < numOfClusters; i++) {
+//				System.out.print(cSize[i] +" ");
+//			}
+		}
+		
+		
+		//display clusters Size (number of points in clusters - Final)
+		private void displayClustersSize() {
+			System.out.print("\nFinal Clusters Size: ");
 			for (int i = 0; i < numOfClusters; i++) {
 				System.out.print(cSize[i] +" ");
 			}
+			
 		}
 
 
