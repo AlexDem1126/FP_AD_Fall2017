@@ -76,7 +76,7 @@ public class Naive_Bayes {
 			countInstanceX_givenClassH(i);
 			
 			//3. # values Xi can take on (i.e. 2 for binary)
-			findNumOfPossibleValuesX();// !!!
+			findNumOfPossibleValuesX(i);// !!!
 			
 			//4. P(X|H) - find probability of generating instance X given class H	
 			findProbabilityInstanceX_givenClassH();	
@@ -145,7 +145,7 @@ public class Naive_Bayes {
 		one90Minus = new int[numOfDimension];	
 		int cs = 0;
 		for (int i = 0; i < numOfPoints; i++) {
-//delete			System.out.println("\n"+i);
+//delete			System.out.println("\n"+i);8
 			if(point[i] == i2 && cs != clustersSize[i2]){
 				for (int j = 0; j < numOfDimension; j++) {
 //delete					System.out.print(dataset[i][j] +" ");
@@ -175,16 +175,23 @@ public class Naive_Bayes {
 	
 	
 	
-	private void findNumOfPossibleValuesX(){
+	private void findNumOfPossibleValuesX(int i2){
 		numOfPossibleValuesX = new int[numOfDimension];		
 		int j = 0;
+		int cs = 0;
 		while(j < numOfDimension){
 			HashSet<Integer> set = new HashSet<>();
 			for (int i = 0; i < numOfPoints; i++) {
-				if (!set.contains((int) dataset[i][j])){
-					set.add((int) dataset[i][j]);
-					numOfPossibleValuesX[j] = set.size();
-		        }
+				
+					if (!set.contains((int) dataset[i][j])){
+						if(point[i] == i2 && cs != clustersSize[i2]){
+							set.add((int) dataset[i][j]);
+							numOfPossibleValuesX[j] = set.size();
+						}
+						
+			        }
+					cs++;
+								
 			}
 			j++;
 		}
@@ -224,16 +231,16 @@ public class Naive_Bayes {
 				double nornilezed90Plus = 0;
 				double nornilezed90Minus = 0;
 				for (int j = 0; j < numOfDimension; j++) {
-					if(dataset[cs][j] == 0){
+					if(dataset[i][j] == 0){
 						instanceX_beingInClass90Plus[j] = prb_zero90Plus[j];
 						instanceX_beingInClass90Minus[j] = prb_zero90Minus[j];
 					}				
-					else if (dataset[cs][j] == 1) {
+					else if (dataset[i][j] == 1) {
 						instanceX_beingInClass90Plus[j] = prb_one90Plus[j];
 						instanceX_beingInClass90Minus[j] = prb_one90Minus[j];
 					}
 					else {
-						System.out.println("ERROR_2: value of attribute ["+cs+"]["+j+"] is not equal to 0 or 1.");
+						System.out.println("ERROR_2: value of attribute ["+i+"]["+j+"] is not equal to 0 or 1.");
 					}
 				}
 				multiX_beingInClass90Plus = findMultiX_beingInClass90Plus(instanceX_beingInClass90Plus);
