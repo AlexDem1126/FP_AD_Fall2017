@@ -53,7 +53,7 @@ public class Naive_Bayes {
 	 * @param clusterSize_K 
 	 * @param point_K ***********/
 	//******************************************************************
-//	public Naive_Bayes(int[] pointK, int[] clustersSizeK, double[] trueGradeMF, double[][] datasetMF, int numOfPointsMF, int numOfDimensionMF) {
+
 	public Naive_Bayes(int k, int[] point_K, int[] clusterSize_K, double[] trueGradeMF, double[][] datasetMF, int numOfPointsMF, int numOfDimensionMF) {
 		num_clusters = k;
 		point = point_K;
@@ -83,7 +83,7 @@ public class Naive_Bayes {
 			
 			//5. P(H|X) = P(X|H)*P(H). find probability of instance X being in class H
 			findProbabilityInstanceX_beingInClassH(i);
-////			trueGradeTraining = convertActualTrueGradeTo90and89();
+
 			//6. find Accuracy
 			countTP_FP_FN_TN(i);
 			accuracyTraining = findAccuracyTraining(i);
@@ -145,10 +145,8 @@ public class Naive_Bayes {
 		one90Minus = new int[numOfDimension];	
 		int cs = 0;
 		for (int i = 0; i < numOfPoints; i++) {
-//delete			System.out.println("\n"+i);8
 			if(point[i] == i2 && cs != clustersSize[i2]){
 				for (int j = 0; j < numOfDimension; j++) {
-//delete					System.out.print(dataset[i][j] +" ");
 					if((dataset[i][j] == 0) && (trueGradeTraining[cs] >= 90)){
 						zero90Plus[j]++;
 					}
@@ -166,11 +164,8 @@ public class Naive_Bayes {
 					}
 				}
 				cs++;
- 			}
-			
-//to delete			System.out.println(i+ " zero90Plus: " +zero90Plus+", zero90Minus: "+ zero90Minus+", one90Plus: "+ one90Plus+ ", one90Minus: "+one90Minus);
+ 			}			
 		}
-//to delete		System.out.println("STOP: countInstanceX_givenClassH90()");
 	}
 	
 	
@@ -254,18 +249,10 @@ public class Naive_Bayes {
 				nornilezed90Plus = probabilityInstanceX_beingInClass90Plus/(probabilityInstanceX_beingInClass90Plus + probabilityInstanceX_beingInClass90Minus);
 				nornilezed90Minus = probabilityInstanceX_beingInClass90Minus/(probabilityInstanceX_beingInClass90Plus + probabilityInstanceX_beingInClass90Minus);
 				
-				largestTrainingPredicted[cs] = findLargest(nornilezed90Plus, nornilezed90Minus);
-//				largestTrainingPredicted[cs] = findLargest(multiX_beingInClass90Plus, multiX_beingInClass90Minus);
-				
-//				System.out.println(i+" true:"+trueGradeTraining[i]+", predicted:"+largestTrainingPredicted[i]+": "+nornilezed90Plus+", " + nornilezed90Minus);	
-//				System.out.println("L"+largestTrainingPredicted[i]+": "+multiX_beingInClass90Plus+", "+multiX_beingInClass90Minus);			
+				largestTrainingPredicted[cs] = findLargest(nornilezed90Plus, nornilezed90Minus);		
 				cs++;
 			}
-//			cs++;
-		}
-				
-//		for (int i = 0; i < clustersSize[i2]; i++) {
-//			}		
+		}		
 	}
 
 
@@ -398,8 +385,7 @@ public class Naive_Bayes {
 		}
 		trueGrade_Test_90and89 = convertTrueGrade_Test_To90and89(numOfPointsTest_F, trueGradeTest_F);
 		countTP_FP_FN_TN_Test(numOfPointsTest_F);
-		accuracy_Test = findAccuracyTest();
-		System.out.println("STOP");
+		accuracy_Test = findAccuracyTest();		
 	}	
 	
 	
@@ -450,6 +436,7 @@ public class Naive_Bayes {
 		double AccuracyTest_F = 0;
 		AccuracyTest_F = (TP + TN)/(TP + TN + FP + FN);	
 		System.out.println("Accuracy of testing dataset: " + AccuracyTest_F*100 +"%");
+		System.out.println("STOP");
 		return AccuracyTest_F;
 	}
 
