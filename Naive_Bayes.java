@@ -207,8 +207,8 @@ public class Naive_Bayes {
 		prb_one90Minus = new double[numOfDimension];
 		for (int i = 0; i < numOfDimension; i++) {
 			prb_zero90Plus[i] = (zero90Plus[i] + ls) / (classType[0] + (ls * numOfPossibleValuesX[i]));
-			prb_zero90Minus[i] = (zero90Minus[i] + ls) / (classType[0] + (ls * numOfPossibleValuesX[i]));
-			prb_one90Plus[i] =  (one90Plus[i] + ls) / (classType[1] + (ls * numOfPossibleValuesX[i]));
+			prb_zero90Minus[i] = (zero90Minus[i] + ls) / (classType[1] + (ls * numOfPossibleValuesX[i]));
+			prb_one90Plus[i] =  (one90Plus[i] + ls) / (classType[0] + (ls * numOfPossibleValuesX[i]));
 			prb_one90Minus[i] =  (one90Minus[i] + ls) / (classType[1] + (ls * numOfPossibleValuesX[i]));
 		}			
 	}
@@ -353,7 +353,7 @@ public class Naive_Bayes {
 				
 			}			
 		}
-		System.out.println("TRAINING cluster"+i2+": TP= "+TP + ", FP= "+FP + ", FN= "+FN + ", TN= " + TN);
+		System.out.println("Cluster"+i2+", TRAINING: TP= "+TP + ", FP= "+FP + ", FN= "+FN + ", TN= " + TN);
 	}
 	
 	
@@ -361,7 +361,7 @@ public class Naive_Bayes {
 	private double findAccuracyTraining(int i2) {
 		double AccuracyTraining_F = 0;
 		AccuracyTraining_F = (TP + TN)/(TP + TN + FP + FN);	
-		System.out.println("TRAINING Accuracy, cluster"+i2+": " + AccuracyTraining_F*100 +"%");
+		System.out.println("Cluster"+i2+", TRAINING Accuracy: " + AccuracyTraining_F*100 +"%");
 		return AccuracyTraining_F;
 	}
 
