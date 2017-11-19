@@ -69,8 +69,10 @@ public class Naive_Bayes_without_Kmeans {
 		//5. P(H|X) = P(X|H)*P(H). find probability of instance X being in class H
 		findProbabilityInstanceX_beingInClassH();
 		
-		//6. find Accuracy
+		//6. count True Positive(TP), False Positive(FP), False Negative(FN), True Negative(TN)		
 		countTP_FP_FN_TN();
+		
+		//7. find Accuracy
 		accuracyTraining = findAccuracyTraining();		
 	}
 	
@@ -256,7 +258,7 @@ public class Naive_Bayes_without_Kmeans {
 	}
 	
 	
-	//6. find Accuracy
+	//6. count True Positive(TP), False Positive(FP), False Negative(FN), True Negative(TN)
 	private void countTP_FP_FN_TN() {
 		TP = 0;	//TP is True Positive 
 		FP = 0;	//FP is False Positive 
@@ -283,7 +285,7 @@ public class Naive_Bayes_without_Kmeans {
 	}
 	
 	
-	
+	//7. find Accuracy
 	private double findAccuracyTraining() {
 		double AccuracyTraining_F = 0;
 		AccuracyTraining_F = (TP + TN)/(TP + TN + FP + FN);	
