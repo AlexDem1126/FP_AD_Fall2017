@@ -43,6 +43,15 @@ public class kmeans {
 	
 	
 	
+	public double[][] getCentroids() {
+		return centroids;
+	}
+	public void setCentroids(double[][] centroids) {
+		this.centroids = centroids;
+	}
+	
+	
+	
 	public kmeans(double[][] datasetMF, int numOfPointsMF, int numOfDimensionMF) {
 		dataset = datasetMF;
 		numOfPoints = numOfPointsMF;
