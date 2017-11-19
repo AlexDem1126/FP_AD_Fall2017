@@ -16,10 +16,15 @@ public class myMain {
 				System.out.println("F=" + file + " K=" + number_of_clusters + " I=" + max_number_of_iterations + " T=" + convergence_threshold + " R=" + number_of_runs);	
 				
 
-				double[][] prb_zero90Plus_Tr_table = new double[number_of_runs][]; //zero90Plus training table
-				double[][] prb_zero90Minus_Tr_table = new double[number_of_runs][];// zero90Minus training table
-				double[][] prb_one90Plus_Tr_table = new double[number_of_runs][]; //one90Plus training table
-				double[][] prb_one90Minus_Tr_table = new double[number_of_runs][]; //one90Minus training table
+				double[][] prb_zero90Plus_Tr_table = new double[number_of_runs][]; //zero90Plus training table for whole dataset
+				double[][] prb_zero90Minus_Tr_table = new double[number_of_runs][];// zero90Minus training table for whole dataset
+				double[][] prb_one90Plus_Tr_table = new double[number_of_runs][]; //one90Plus training table for whole dataset
+				double[][] prb_one90Minus_Tr_table = new double[number_of_runs][]; //one90Minus training table for whole dataset
+				
+				double[][] prb_zero90Plus_Tr_table_K = new double[number_of_runs][]; //zero90Plus training table for cluster K
+				double[][] prb_zero90Minus_Tr_table_K = new double[number_of_runs][];// zero90Minus training table for cluster K
+				double[][] prb_one90Plus_Tr_table_K = new double[number_of_runs][]; //one90Plus training table for cluster K
+				double[][] prb_one90Minus_Tr_table_K = new double[number_of_runs][]; //one90Minus training table for cluster K
 
 				
 				
