@@ -7,17 +7,25 @@ public class myMain {
 		if (args.length > 0 && args.length < 6) {															
 			try {
 				
+				String file = args[0]; 											// F is a file name
+				int number_of_clusters = Integer.parseInt(args[1]); 			// K is a number of clusters
+				int max_number_of_iterations = Integer.parseInt(args[2]); 		// I is a max number of iterations in any run
+				double convergence_threshold = Double.parseDouble(args[3]); 	// T is a convergence threshold
+				int number_of_runs = Integer.parseInt(args[4]); 				// R is a number of runs
+
+				System.out.println("F=" + file + " K=" + number_of_clusters + " I=" + max_number_of_iterations + " T=" + convergence_threshold + " R=" + number_of_runs);	
+				
 				//N-fold cross validation
 				int numOfFolds = 5;				
 				for (int nfolds = 0; nfolds < numOfFolds; nfolds++) {					
 					
-					String F = args[0]; 					// F is a file name
-					int K = Integer.parseInt(args[1]); 		// K is a number of clusters
-					int I = Integer.parseInt(args[2]); 		// I is a max number of iterations in any run
-					double T = Double.parseDouble(args[3]); // T is a convergence threshold
-					int R = Integer.parseInt(args[4]); 		// R is a number of runs
+					String F = file; 					// F is a file name
+					int K = number_of_clusters; 		// K is a number of clusters
+					int I = max_number_of_iterations; 	// I is a max number of iterations in any run
+					double T = convergence_threshold; 	// T is a convergence threshold
+					int R = number_of_runs; 			// R is a number of runs
 
-					System.out.println("F=" + F + " K=" + K + " I=" + I + " T=" + T + " R=" + R);	
+//					System.out.println("F=" + F + " K=" + K + " I=" + I + " T=" + T + " R=" + R);	
 					System.out.println("******************************************************************");
 					System.out.println("##### "+ nfolds + " - fold cross validation #####");
 					System.out.println("******************************************************************");
