@@ -139,7 +139,7 @@ public class myMain {
 					//******************************************************************
 					System.out.println("\n***** Naive Bayes Classifier (NB) *****");
 					Naive_Bayes objNB = new Naive_Bayes(K, point_K[sse_K_SMALL_index], clusterSize_K[sse_K_SMALL_index], objMF.getTrueGrade(), objMF.getDataset(), objMF.getNumOfPoints(), objMF.getNumOfDimension());
-					objNB.Naive_Bayes_Test(centroids_K[count_R], objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest());
+					objNB.Naive_Bayes_Test(centroids_K[sse_K_SMALL_index], objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest());
 					
 					/*********** END Naive Bayes Classifier (NB) ***********/
 					
