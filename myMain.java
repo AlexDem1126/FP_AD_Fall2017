@@ -104,6 +104,7 @@ public class myMain {
 					double[] sse_K = new double[RK];
 					int[][] point_K = new int[RK][];
 					int[][] clusterSize_K = new int[RK][];
+					double[][][] centroids_K = new double[RK][][];
 
 					for (int i = 0; i < RK; i++) {
 						sse_K[i] = 0;
@@ -119,7 +120,8 @@ public class myMain {
 						
 						sse_K[count_R] = objKmeans.getSse_final_K();
 						point_K[count_R] = objKmeans.getPoint();
-						clusterSize_K[count_R] = objKmeans.getcSize();					
+						clusterSize_K[count_R] = objKmeans.getcSize();	
+						centroids_K[count_R] = objKmeans.getCentroids();	
 													
 								
 						R--;
@@ -137,7 +139,7 @@ public class myMain {
 					//******************************************************************
 					System.out.println("\n***** Naive Bayes Classifier (NB) *****");
 					Naive_Bayes objNB = new Naive_Bayes(K, point_K[sse_K_SMALL_index], clusterSize_K[sse_K_SMALL_index], objMF.getTrueGrade(), objMF.getDataset(), objMF.getNumOfPoints(), objMF.getNumOfDimension());
-//					objNB.Naive_Bayes_Test(objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest());
+					objNB.Naive_Bayes_Test(objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest());
 					
 					/*********** END Naive Bayes Classifier (NB) ***********/
 					
