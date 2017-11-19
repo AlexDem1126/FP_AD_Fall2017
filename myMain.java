@@ -15,21 +15,41 @@ public class myMain {
 
 				System.out.println("F=" + file + " K=" + number_of_clusters + " I=" + max_number_of_iterations + " T=" + convergence_threshold + " R=" + number_of_runs);	
 				
-
-				double[][] prb_zero90Plus_Tr_table = new double[number_of_runs][]; //zero90Plus training table for whole dataset
-				double[][] prb_zero90Minus_Tr_table = new double[number_of_runs][];// zero90Minus training table for whole dataset
-				double[][] prb_one90Plus_Tr_table = new double[number_of_runs][]; //one90Plus training table for whole dataset
-				double[][] prb_one90Minus_Tr_table = new double[number_of_runs][]; //one90Minus training table for whole dataset
-				
-				double[][] prb_zero90Plus_Tr_table_K = new double[number_of_runs][]; //zero90Plus training table for cluster K
-				double[][] prb_zero90Minus_Tr_table_K = new double[number_of_runs][];// zero90Minus training table for cluster K
-				double[][] prb_one90Plus_Tr_table_K = new double[number_of_runs][]; //one90Plus training table for cluster K
-				double[][] prb_one90Minus_Tr_table_K = new double[number_of_runs][]; //one90Minus training table for cluster K
-
 				
 				
 				//N-fold cross validation
-				int numOfFolds = 5;				
+				int numOfFolds = 5;								
+				
+
+				double[][] prb_zero90Plus_Tr_table = new double[numOfFolds][]; //zero90Plus training table for whole dataset
+				double[][] prb_zero90Minus_Tr_table = new double[numOfFolds][];// zero90Minus training table for whole dataset
+				double[][] prb_one90Plus_Tr_table = new double[numOfFolds][]; //one90Plus training table for whole dataset
+				double[][] prb_one90Minus_Tr_table = new double[numOfFolds][]; //one90Minus training table for whole dataset
+				
+				for (int i = 0; i < numOfFolds; i++) {					
+					prb_zero90Plus_Tr_table[i] = new double[number_of_clusters];
+					prb_zero90Minus_Tr_table[i] = new double[number_of_clusters];
+					prb_one90Plus_Tr_table[i] = new double[number_of_clusters];
+					prb_one90Minus_Tr_table[i] = new double[number_of_clusters];
+				}
+				
+				
+				double[][] prb_zero90Plus_Tr_table_K = new double[numOfFolds][]; //zero90Plus training table for cluster K
+				double[][] prb_zero90Minus_Tr_table_K = new double[numOfFolds][];// zero90Minus training table for cluster K
+				double[][] prb_one90Plus_Tr_table_K = new double[numOfFolds][]; //one90Plus training table for cluster K
+				double[][] prb_one90Minus_Tr_table_K = new double[numOfFolds][]; //one90Minus training table for cluster K
+				
+				for (int i = 0; i < numOfFolds; i++) {					
+					prb_zero90Plus_Tr_table_K[i] = new double[number_of_clusters];
+					prb_zero90Minus_Tr_table_K[i] = new double[number_of_clusters];
+					prb_one90Plus_Tr_table_K[i] = new double[number_of_clusters];
+					prb_one90Minus_Tr_table_K[i] = new double[number_of_clusters];
+				}
+
+				
+				
+				
+				
 				for (int nfolds = 0; nfolds < numOfFolds; nfolds++) {					
 					
 					String F = file; 					// F is a file name
@@ -111,6 +131,12 @@ public class myMain {
 					Naive_Bayes_without_Kmeans objNB_wk = new Naive_Bayes_without_Kmeans(objMF.getTrueGrade(), objMF.getDataset(), objMF.getNumOfPoints(), objMF.getNumOfDimension());
 					objNB_wk.Naive_Bayes_Test(objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest());
 					
+					int K_NB = K;
+					prb_zero90Plus_Tr_table[nfolds] = objNB_wk.getPrb_zero90Plus();
+					prb_zero90Minus_Tr_table[nfolds] = objNB_wk.getPrb_zero90Minus();
+					prb_one90Plus_Tr_table[nfolds] = objNB_wk.getPrb_one90Plus();
+					prb_one90Minus_Tr_table[nfolds] = objNB_wk.getPrb_one90Minus();
+					
 					/*********** END Naive Bayes Classifier (NB) WITHOUT K-MEANS***********/
 					
 					
@@ -129,8 +155,9 @@ public class myMain {
 
 					for (int i = 0; i < RK; i++) {
 						sse_K[i] = 0;
-						point_K[i] = new int[RK];
-						point_K[i] = new int[RK];						
+						point_K[i] = new int[objMF.getNumOfDimension()];
+						clusterSize_K[i] = new int[K];	
+						centroids_K = new double[RK][K][objMF.getNumOfDimension()];
 					}
 					
 					System.out.println("\n***** Kmeans *****");
