@@ -34,6 +34,7 @@ public class Naive_Bayes {
 	private int ls = 2; //Laplace smoothing number
 	private int[] numOfPossibleValuesX;
 	private int num_clusters;
+	private double[][] centroids;
 	
 	
 
@@ -47,6 +48,33 @@ public class Naive_Bayes {
 
 
 
+	public double[] getPrb_zero90Plus() {
+		return prb_zero90Plus;
+	}
+	public void setPrb_zero90Plus(double[] prb_zero90Plus) {
+		this.prb_zero90Plus = prb_zero90Plus;
+	}
+	public double[] getPrb_zero90Minus() {
+		return prb_zero90Minus;
+	}
+	public void setPrb_zero90Minus(double[] prb_zero90Minus) {
+		this.prb_zero90Minus = prb_zero90Minus;
+	}
+	public double[] getPrb_one90Plus() {
+		return prb_one90Plus;
+	}
+	public void setPrb_one90Plus(double[] prb_one90Plus) {
+		this.prb_one90Plus = prb_one90Plus;
+	}
+	public double[] getPrb_one90Minus() {
+		return prb_one90Minus;
+	}
+	public void setPrb_one90Minus(double[] prb_one90Minus) {
+		this.prb_one90Minus = prb_one90Minus;
+	}
+	
+	
+	
 	//******************************************************************
 	/*********** Training Naive Bayes Classifier 
 	 * @param k 
@@ -84,8 +112,10 @@ public class Naive_Bayes {
 			//5. P(H|X) = P(X|H)*P(H). find probability of instance X being in class H
 			findProbabilityInstanceX_beingInClassH(i);
 
-			//6. find Accuracy
+			//6. count True Positive(TP), False Positive(FP), False Negative(FN), True Negative(TN)			
 			countTP_FP_FN_TN(i);
+			
+			//7. find Accuracy
 			accuracyTraining = findAccuracyTraining(i);
 		}				
 	}
@@ -170,6 +200,7 @@ public class Naive_Bayes {
 	
 	
 	
+	//3. # values Xi can take on (i.e. 2 for binary)
 	private void findNumOfPossibleValuesX(int i2){
 		numOfPossibleValuesX = new int[numOfDimension];		
 		int j = 0;
@@ -194,7 +225,7 @@ public class Naive_Bayes {
 	
 	
 	
-	//3. P(X|H) - find probability of generating instance X given class H
+	//4. P(X|H) - find probability of generating instance X given class H
 	private void findProbabilityInstanceX_givenClassH(){		
 		prb_zero90Plus = new double[numOfDimension];
 		prb_zero90Minus = new double[numOfDimension];
@@ -210,7 +241,7 @@ public class Naive_Bayes {
 	
 	
 	
-	//4. P(H|X) = P(X|H)*P(H). find probability of instance X being in class H
+	//5. P(H|X) = P(X|H)*P(H). find probability of instance X being in class H
 	private void findProbabilityInstanceX_beingInClassH(int i2){
 		double[] instanceX_beingInClass90Plus = new double[numOfDimension];
 		double[] instanceX_beingInClass90Minus = new double[numOfDimension];
@@ -313,6 +344,7 @@ public class Naive_Bayes {
 	
 	
 	
+	//6. count True Positive(TP), False Positive(FP), False Negative(FN), True Negative(TN)
 	private void countTP_FP_FN_TN(int i2) {
 		TP = 0;	//TP is True Positive 
 		FP = 0;	//FP is False Positive 
@@ -345,6 +377,7 @@ public class Naive_Bayes {
 	
 	
 	
+	//7. find Accuracy
 	private double findAccuracyTraining(int i2) {
 		double AccuracyTraining_F = 0;
 		AccuracyTraining_F = (TP + TN)/(TP + TN + FP + FN);	
@@ -355,10 +388,21 @@ public class Naive_Bayes {
 
 	
 	//******************************************************************
-	/*********** Test Naive Bayes Classifier ***********/
+	/*********** Test Naive Bayes Classifier 
+	 * @param ds ***********/
 	//******************************************************************		
-	public void Naive_Bayes_Test(double[][] datasetTest_F, double[] trueGradeTest_F, int numOfPointsTest_F) {
-//		trueGrade_Test = trueGradeTest_F;
+	public void Naive_Bayes_Test(double[][] centroids_F, double[][] datasetTest_F, double[] trueGradeTest_F, int numOfPointsTest_F) {
+		centroids = centroids_F;
+		
+		//8. P(H|X) = P(X|H)*P(H). find probability of instance X being in class H
+//		findProbabilityInstanceX_beingInClassH_Test();
+
+		//9. count True Positive(TP), False Positive(FP), False Negative(FN), True Negative(TN)			
+//		countTP_FP_FN_TN(i);
+		
+		//10. find Accuracy
+//		accuracyTraining = findAccuracyTraining(i);
+		
 		double[] instanceX_beingInClass90Plus_Test = new double[numOfDimension];
 		double[] instanceX_beingInClass90Minus_Test = new double[numOfDimension];
 		largest_TestPredicted = new double[numOfPointsTest_F];
@@ -387,6 +431,12 @@ public class Naive_Bayes {
 		countTP_FP_FN_TN_Test(numOfPointsTest_F);
 		accuracy_Test = findAccuracyTest();		
 	}	
+	
+	
+	//8. P(H|X) = P(X|H)*P(H). find probability of instance X being in class H
+//	findProbabilityInstanceX_beingInClassH_Test(){
+//		
+//	}
 	
 	
 	
