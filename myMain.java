@@ -27,23 +27,23 @@ public class myMain {
 				double[][] prb_one90Minus_Tr_table = new double[numOfFolds][]; //one90Minus training table for whole dataset
 				
 				for (int i = 0; i < numOfFolds; i++) {					
-					prb_zero90Plus_Tr_table[i] = new double[number_of_clusters];
-					prb_zero90Minus_Tr_table[i] = new double[number_of_clusters];
-					prb_one90Plus_Tr_table[i] = new double[number_of_clusters];
-					prb_one90Minus_Tr_table[i] = new double[number_of_clusters];
+					prb_zero90Plus_Tr_table[i] = new double[305]; //305- is NumOfDimension
+					prb_zero90Minus_Tr_table[i] = new double[305];
+					prb_one90Plus_Tr_table[i] = new double[305];
+					prb_one90Minus_Tr_table[i] = new double[305];
 				}
 				
 				
-				double[][] prb_zero90Plus_Tr_table_K = new double[numOfFolds][]; //zero90Plus training table for cluster K
-				double[][] prb_zero90Minus_Tr_table_K = new double[numOfFolds][];// zero90Minus training table for cluster K
-				double[][] prb_one90Plus_Tr_table_K = new double[numOfFolds][]; //one90Plus training table for cluster K
-				double[][] prb_one90Minus_Tr_table_K = new double[numOfFolds][]; //one90Minus training table for cluster K
+				double[][][] prb_zero90Plus_Tr_table_K = new double[numOfFolds][][]; //zero90Plus training table for cluster K
+				double[][][] prb_zero90Minus_Tr_table_K = new double[numOfFolds][][];// zero90Minus training table for cluster K
+				double[][][] prb_one90Plus_Tr_table_K = new double[numOfFolds][][]; //one90Plus training table for cluster K
+				double[][][] prb_one90Minus_Tr_table_K = new double[numOfFolds][][]; //one90Minus training table for cluster K
 				
 				for (int i = 0; i < numOfFolds; i++) {					
-					prb_zero90Plus_Tr_table_K[i] = new double[number_of_clusters];
-					prb_zero90Minus_Tr_table_K[i] = new double[number_of_clusters];
-					prb_one90Plus_Tr_table_K[i] = new double[number_of_clusters];
-					prb_one90Minus_Tr_table_K[i] = new double[number_of_clusters];
+					prb_zero90Plus_Tr_table_K[i] = new double[number_of_clusters][305]; //305- is NumOfDimension
+					prb_zero90Minus_Tr_table_K[i] = new double[number_of_clusters][305];
+					prb_one90Plus_Tr_table_K[i] = new double[number_of_clusters][305];
+					prb_one90Minus_Tr_table_K[i] = new double[number_of_clusters][305];
 				}
 
 				
@@ -131,7 +131,6 @@ public class myMain {
 					Naive_Bayes_without_Kmeans objNB_wk = new Naive_Bayes_without_Kmeans(objMF.getTrueGrade(), objMF.getDataset(), objMF.getNumOfPoints(), objMF.getNumOfDimension());
 					objNB_wk.Naive_Bayes_Test(objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest());
 					
-					int K_NB = K;
 					prb_zero90Plus_Tr_table[nfolds] = objNB_wk.getPrb_zero90Plus();
 					prb_zero90Minus_Tr_table[nfolds] = objNB_wk.getPrb_zero90Minus();
 					prb_one90Plus_Tr_table[nfolds] = objNB_wk.getPrb_one90Plus();
@@ -157,7 +156,7 @@ public class myMain {
 						sse_K[i] = 0;
 						point_K[i] = new int[objMF.getNumOfDimension()];
 						clusterSize_K[i] = new int[K];	
-						centroids_K = new double[RK][K][objMF.getNumOfDimension()];
+						centroids_K[i] = new double[K][objMF.getNumOfDimension()];
 					}
 					
 					System.out.println("\n***** Kmeans *****");
@@ -186,8 +185,29 @@ public class myMain {
 					/*********** Naive Bayes Classifier (NB) ***********/
 					//******************************************************************
 					System.out.println("\n***** Naive Bayes Classifier (NB) *****");
-					Naive_Bayes objNB = new Naive_Bayes(K, point_K[sse_K_SMALL_index], clusterSize_K[sse_K_SMALL_index], objMF.getTrueGrade(), objMF.getDataset(), objMF.getNumOfPoints(), objMF.getNumOfDimension());
-					objNB.Naive_Bayes_Test(centroids_K[sse_K_SMALL_index], objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest());
+					int numOfPoints =  objMF.getNumOfPoints();
+					displayUpdatedPoints(point_K[sse_K_SMALL_index], numOfPoints);
+					
+					int[] clustersSize = clusterSize_K[sse_K_SMALL_index];
+					displayClustersSize(clusterSize_K[sse_K_SMALL_index], K);
+					
+					Naive_Bayes objNB;
+					int K_NB = K;
+					int count_clusters = 0;
+					while(K_NB > 0){
+						objNB = new Naive_Bayes(count_clusters, point_K[sse_K_SMALL_index], clusterSize_K[sse_K_SMALL_index], objMF.getTrueGrade(), objMF.getDataset(), objMF.getNumOfPoints(), objMF.getNumOfDimension());
+						
+						prb_zero90Plus_Tr_table_K[nfolds][count_clusters] = objNB.getPrb_zero90Plus();
+						prb_zero90Minus_Tr_table_K[nfolds][count_clusters] = objNB.getPrb_zero90Minus();
+						prb_one90Plus_Tr_table_K[nfolds][count_clusters] = objNB.getPrb_one90Plus();
+						prb_one90Minus_Tr_table_K[nfolds][count_clusters] = objNB.getPrb_one90Minus();
+						
+						K_NB--;
+						count_clusters++;
+					}
+
+					
+//					objNB.Naive_Bayes_Test(centroids_K[sse_K_SMALL_index], objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest());
 					
 					/*********** END Naive Bayes Classifier (NB) ***********/
 					
@@ -214,6 +234,27 @@ public class myMain {
 		}	
 
 	}
+
+
+	//display clusters Size (number of points in clusters - Final)
+	private static void displayClustersSize(int[] clusterSize2, int num_clusters) {
+		System.out.print("\nFinal Clusters Size: ");
+		for (int i = 0; i < num_clusters; i++) {
+			System.out.print(clusterSize2[i] +" ");
+		}
+		System.out.println();
+		
+	}
+
+
+	//display UpdatedPoints
+	private static void displayUpdatedPoints(int[] point2, int numOfPoints2) {
+		System.out.print("Points: ");
+		for (int i = 0; i < numOfPoints2; i++) {
+			System.out.print(point2[i]+", ");
+		}		
+	}
+	
 
 
 	//find smallest index of SSE
