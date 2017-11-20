@@ -35,6 +35,7 @@ public class Naive_Bayes {
 	private int[] numOfPossibleValuesX;
 	private int num_clusters;
 	private double[][] centroids;
+	private int cluster_num;
 	
 	
 
@@ -77,69 +78,48 @@ public class Naive_Bayes {
 	
 	//******************************************************************
 	/*********** Training Naive Bayes Classifier 
+	 * @param count_clusters_K 
 	 * @param k 
 	 * @param clusterSize_K 
 	 * @param point_K ***********/
 	//******************************************************************
 
-	public Naive_Bayes(int k, int[] point_K, int[] clusterSize_K, double[] trueGradeMF, double[][] datasetMF, int numOfPointsMF, int numOfDimensionMF) {
-		num_clusters = k;
+	public Naive_Bayes( int count_clusters_K, int[] point_K, int[] clusterSize_K, double[] trueGradeMF, double[][] datasetMF, int numOfPointsMF, int numOfDimensionMF) {
+//		num_clusters = k;
+		cluster_num = count_clusters_K;
 		point = point_K;
 		clustersSize = clusterSize_K;
 		
 		dataset = datasetMF;
 		numOfPoints = numOfPointsMF;
-		numOfDimension = numOfDimensionMF;
-		displayUpdatedPoints(point);
-		displayClustersSize();
+		numOfDimension = numOfDimensionMF;	
 		
-		
-		for (int i = 0; i < num_clusters; i++) {	
-			trueGradeTraining = convertActualTrueGradeTo90and89(trueGradeMF, i);
+
+			trueGradeTraining = convertActualTrueGradeTo90and89(trueGradeMF, cluster_num);
 			
 			//1. P(H) - find probability of occurrence of class H
-			ProbabilityOfClassH = findProbabilityOfClassH(i);
+			ProbabilityOfClassH = findProbabilityOfClassH(cluster_num);
 			
 			//2. count instance X given class H
-			countInstanceX_givenClassH(i);
+			countInstanceX_givenClassH(cluster_num);
 			
 			//3. # values Xi can take on (i.e. 2 for binary)
-			findNumOfPossibleValuesX(i);// !!!
+			findNumOfPossibleValuesX(cluster_num);// !!!
 			
 			//4. P(X|H) - find probability of generating instance X given class H	
 			findProbabilityInstanceX_givenClassH();	
 			
 			//5. P(H|X) = P(X|H)*P(H). find probability of instance X being in class H
-			findProbabilityInstanceX_beingInClassH(i);
+			findProbabilityInstanceX_beingInClassH(cluster_num);
 
 			//6. count True Positive(TP), False Positive(FP), False Negative(FN), True Negative(TN)			
-			countTP_FP_FN_TN(i);
+			countTP_FP_FN_TN(cluster_num);
 			
 			//7. find Accuracy
-			accuracyTraining = findAccuracyTraining(i);
-		}				
+			accuracyTraining = findAccuracyTraining(cluster_num);						
 	}
-	
 
-	//display UpdatedPoints
-	private void displayUpdatedPoints(int[] point2) {			
-		System.out.print("Points: ");
-		for (int i = 0; i < numOfPoints; i++) {
-			System.out.print(point[i]+", ");
-		}
-		
-	}
 	
-	
-	//display clusters Size (number of points in clusters - Final)
-			private void displayClustersSize() {
-				System.out.print("\nFinal Clusters Size: ");
-				for (int i = 0; i < num_clusters; i++) {
-					System.out.print(clustersSize[i] +" ");
-				}
-				System.out.println();
-			}
-			
 
 	//1. P(H) - find probability of occurrence of class H
 	private double[] findProbabilityOfClassH(int i2){
