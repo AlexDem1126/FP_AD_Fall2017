@@ -191,7 +191,7 @@ public class myMain {
 					int[] clustersSize = clusterSize_K[sse_K_SMALL_index];
 					displayClustersSize(clusterSize_K[sse_K_SMALL_index], K);
 					
-					Naive_Bayes objNB;
+					Naive_Bayes objNB = null;
 					int K_NB = K;
 					int count_clusters = 0;
 					while(K_NB > 0){
@@ -203,11 +203,11 @@ public class myMain {
 						prb_one90Minus_Tr_table_K[nfolds][count_clusters] = objNB.getPrb_one90Minus();
 						
 						K_NB--;
-						count_clusters++;
+						count_clusters++;						
 					}
 
 					
-//					objNB.Naive_Bayes_Test(centroids_K[sse_K_SMALL_index], objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest());
+					objNB.Naive_Bayes_Test(K, centroids_K[sse_K_SMALL_index], objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest(), prb_zero90Plus_Tr_table_K, prb_zero90Minus_Tr_table_K, prb_one90Plus_Tr_table_K, prb_one90Minus_Tr_table_K, nfolds);
 					
 					/*********** END Naive Bayes Classifier (NB) ***********/
 					
