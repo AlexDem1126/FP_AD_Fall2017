@@ -368,8 +368,7 @@ public class Naive_Bayes_without_Kmeans {
 		}
 		trueGrade_Test_90and89 = convertTrueGrade_Test_To90and89(numOfPointsTest_F, trueGradeTest_F);
 		countTP_FP_FN_TN_Test(numOfPointsTest_F);
-		accuracy_Test = findAccuracyTest();
-		System.out.println("STOP");
+		accuracy_Test = findAccuracyTest();		
 	}	
 	
 	
