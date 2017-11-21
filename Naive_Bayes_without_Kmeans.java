@@ -44,6 +44,32 @@ public class Naive_Bayes_without_Kmeans {
 
 
 
+	public double[] getPrb_zero90Plus() {
+		return prb_zero90Plus;
+	}
+	public void setPrb_zero90Plus(double[] prb_zero90Plus) {
+		this.prb_zero90Plus = prb_zero90Plus;
+	}
+	public double[] getPrb_zero90Minus() {
+		return prb_zero90Minus;
+	}
+	public void setPrb_zero90Minus(double[] prb_zero90Minus) {
+		this.prb_zero90Minus = prb_zero90Minus;
+	}
+	public double[] getPrb_one90Plus() {
+		return prb_one90Plus;
+	}
+	public void setPrb_one90Plus(double[] prb_one90Plus) {
+		this.prb_one90Plus = prb_one90Plus;
+	}
+	public double[] getPrb_one90Minus() {
+		return prb_one90Minus;
+	}
+	public void setPrb_one90Minus(double[] prb_one90Minus) {
+		this.prb_one90Minus = prb_one90Minus;
+	}
+	
+	
 	//******************************************************************
 	/*********** Training Naive Bayes Classifier ***********/
 	//******************************************************************
@@ -289,7 +315,7 @@ public class Naive_Bayes_without_Kmeans {
 	private double findAccuracyTraining() {
 		double AccuracyTraining_F = 0;
 		AccuracyTraining_F = (TP + TN)/(TP + TN + FP + FN);	
-		System.out.println("Accuracy of training dataset_wk: " + AccuracyTraining_F*100 +"%");
+		System.out.println("TRAINING_wk Accuracy: " + AccuracyTraining_F*100 +"%");
 		return AccuracyTraining_F;
 	}
 
@@ -393,7 +419,7 @@ public class Naive_Bayes_without_Kmeans {
 	private double findAccuracyTest() {
 		double AccuracyTest_F = 0;
 		AccuracyTest_F = (TP + TN)/(TP + TN + FP + FN);	
-		System.out.println("Accuracy of testing dataset_wk: " + AccuracyTest_F*100 +"%");
+		System.out.println("TESTING_wk Accuracy: " + AccuracyTest_F*100 +"%");
 		return AccuracyTest_F;
 	}
 
