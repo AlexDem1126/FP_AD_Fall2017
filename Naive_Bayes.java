@@ -48,6 +48,8 @@ public class Naive_Bayes {
 	private double[] prb_zero90Minus_Tr_table;
 	private double[] prb_one90Plus_Tr_table;
 	private double[] prb_one90Minus_Tr_table;
+	private double[] largest_TestPredicted_whole;
+	private double accuracy_Test_Whole;
 	
 	
 
@@ -423,7 +425,18 @@ public class Naive_Bayes {
 		countTP_FP_FN_TN_Test();
 		
 		//11. find Accuracy
-		accuracy_Test = findAccuracyTest();				
+		accuracy_Test = findAccuracyTest();
+		
+		if(accuracy_Test < 0.86){
+			//12. P(H|X) = P(X|H)*P(H). find probability of instance X being in class H
+			findProbabilityInstanceX_beingInClassH_Test_Whole();
+
+			//13. count True Positive(TP), False Positive(FP), False Negative(FN), True Negative(TN)			
+			countTP_FP_FN_TN_Test_Whole();
+			
+			//14. find Accuracy
+			accuracy_Test_Whole = findAccuracyTest_Whole();
+		}
 	}	
 	
 	
@@ -590,6 +603,89 @@ public class Naive_Bayes {
 		System.out.println("STOP");
 		return AccuracyTest_F;
 	}
+	
+	
+	
+//	12. P(H|X) = P(X|H)*P(H). find probability of instance X being in class H
+	private void findProbabilityInstanceX_beingInClassH_Test_Whole(){
+		double[] instanceX_beingInClass90Plus_Test = new double[numOfDimension];
+		double[] instanceX_beingInClass90Minus_Test = new double[numOfDimension];
+		largest_TestPredicted_whole = new double[numOfPointsTest];				
+		for (int i = 0; i < numOfPointsTest; i++) {			
+			
+			double multiX_beingInClass90Plus_Test = 0;
+			double multiX_beingInClass90Minus_Test = 0;
+			double probabilityInstanceX_beingInClass90Plus_Test = 0;
+			double probabilityInstanceX_beingInClass90Minus_Test = 0;
+			double nornilezed90Plus_Test = 0;
+			double nornilezed90Minus_Test = 0;
+			
+			for (int j = 0; j < numOfDimension; j++) {
+				if(datasetTest[i][j] == 0){
+					instanceX_beingInClass90Plus_Test[j] = prb_zero90Plus_Tr_table[j];
+					instanceX_beingInClass90Minus_Test[j] = prb_zero90Minus_Tr_table[j];					
+				}				
+				else if (datasetTest[i][j] == 1) {
+					instanceX_beingInClass90Plus_Test[j] = prb_one90Plus_Tr_table[j];
+					instanceX_beingInClass90Minus_Test[j] = prb_one90Minus_Tr_table[j];
+				}
+				else {
+					System.out.println("ERROR_3: value of attribute ["+i+"]["+j+"] is not equal to 0 or 1.");
+				}
+			}
+			multiX_beingInClass90Plus_Test = findMultiX_beingInClass90Plus(instanceX_beingInClass90Plus_Test);
+			multiX_beingInClass90Minus_Test = findMultiX_beingInClass90Minus(instanceX_beingInClass90Minus_Test);	
+			
+			//9.1 P(H|X) = P(X|H)*P(H). ProbabilityInstanceX_beingInClassH()			
+			probabilityInstanceX_beingInClass90Plus_Test = multiX_beingInClass90Plus_Test * ProbabilityOfClassH[0];
+			probabilityInstanceX_beingInClass90Minus_Test = multiX_beingInClass90Minus_Test * ProbabilityOfClassH[1];
+			
+			//9.2 normalization of P(H|X)
+			nornilezed90Plus_Test = probabilityInstanceX_beingInClass90Plus_Test/(probabilityInstanceX_beingInClass90Plus_Test + probabilityInstanceX_beingInClass90Minus_Test);
+			nornilezed90Minus_Test = probabilityInstanceX_beingInClass90Minus_Test/(probabilityInstanceX_beingInClass90Plus_Test + probabilityInstanceX_beingInClass90Minus_Test);
+			
+			largest_TestPredicted_whole[i] = findLargest(nornilezed90Plus_Test, nornilezed90Minus_Test);			
+		}
+	}	
+	
+	
+	
+	//13. count True Positive(TP), False Positive(FP), False Negative(FN), True Negative(TN)
+		private void countTP_FP_FN_TN_Test_Whole() {
+			TP = 0;	//TP is True Positive 
+			FP = 0;	//FP is False Positive 
+			FN = 0;	//FN is False Negative 
+			TN = 0;	//TN is True Negative
+			for (int i = 0; i < numOfPointsTest; i++) {	
+				if(trueGradeTest[i] == 90 && largest_TestPredicted_whole[i]==90){
+					TP++; //Prediction was positive +1, and in reality the value was +1
+				}
+				else if (trueGradeTest[i] ==89 && largest_TestPredicted_whole[i]==90) {
+					FP++; //Prediction was positive +1, but in reality the value was -1
+				}
+				else if (trueGradeTest[i] ==90 && largest_TestPredicted_whole[i] ==89) {
+					FN++; //Prediction was negative -1, but in reality the value was +1
+				}
+				else if(trueGradeTest[i] == 89 && largest_TestPredicted_whole[i]==89){
+					TN++; //Prediction was negative -1, but in reality the value was -1
+				}
+				else{
+					System.out.println("ERROR_5: Testing data - TP, FP,FN, TN.");
+				}
+			}	
+			System.out.println("TESTING (Whole): TP= "+TP + ", FP= "+FP + ", FN= "+FN + ", TN= " + TN);
+		}
+		
+		
+		
+		//14. find Accuracy
+		private double findAccuracyTest_Whole() {
+			double AccuracyTest_F = 0;
+			AccuracyTest_F = (TP + TN)/(TP + TN + FP + FN);	
+			System.out.println("TESTING Accuracy (Whole training): " + AccuracyTest_F*100 +"%");
+			System.out.println("STOP");
+			return AccuracyTest_F;
+		}
 
 
 
