@@ -33,9 +33,10 @@ public class Naive_Bayes {
 	private double accuracy_Test;
 	private int ls = 2; //Laplace smoothing number
 	private int[] numOfPossibleValuesX;
-	private int num_clusters;
 	private double[][] centroids;
 	private int cluster_num;
+	private int[] pointTest;
+	private int numOfClusters;
 	
 	
 
@@ -85,7 +86,6 @@ public class Naive_Bayes {
 	//******************************************************************
 
 	public Naive_Bayes( int count_clusters_K, int[] point_K, int[] clusterSize_K, double[] trueGradeMF, double[][] datasetMF, int numOfPointsMF, int numOfDimensionMF) {
-//		num_clusters = k;
 		cluster_num = count_clusters_K;
 		point = point_K;
 		clustersSize = clusterSize_K;
@@ -369,30 +369,43 @@ public class Naive_Bayes {
 	
 	//******************************************************************
 	/*********** Test Naive Bayes Classifier 
+	 * @param k 
+	 * @param prb_one90Minus_Tr_table_K 
+	 * @param prb_one90Plus_Tr_table_K 
+	 * @param prb_zero90Minus_Tr_table_K 
+	 * @param prb_zero90Plus_Tr_table_K 
+	 * @param nfolds 
 	 * @param ds ***********/
 	//******************************************************************		
-	public void Naive_Bayes_Test(double[][] centroids_F, double[][] datasetTest_F, double[] trueGradeTest_F, int numOfPointsTest_F) {
+	public void Naive_Bayes_Test(int k, double[][] centroids_F, double[][] datasetTest_F, double[] trueGradeTest_F, int numOfPointsTest_F, double[][][] prb_zero90Plus_Tr_table_K, double[][][] prb_zero90Minus_Tr_table_K, double[][][] prb_one90Plus_Tr_table_K, double[][][] prb_one90Minus_Tr_table_K, int nfolds) {
 		centroids = centroids_F;
+		numOfClusters = k;
 		
-		//8. P(H|X) = P(X|H)*P(H). find probability of instance X being in class H
+		//8. find pointsTest which are the nearest to a centroid
+		pointTest = new int[numOfPointsTest_F];			
+		for (int i = 0; i < numOfPointsTest_F; i++) {			
+			pointTest[i] = nearest(datasetTest_F[i]);
+		}	
+		
+		//9. P(H|X) = P(X|H)*P(H). find probability of instance X being in class H
 //		findProbabilityInstanceX_beingInClassH_Test();
 
-		//9. count True Positive(TP), False Positive(FP), False Negative(FN), True Negative(TN)			
+		//10. count True Positive(TP), False Positive(FP), False Negative(FN), True Negative(TN)			
 //		countTP_FP_FN_TN(i);
 		
-		//10. find Accuracy
+		//11. find Accuracy
 //		accuracyTraining = findAccuracyTraining(i);
 		
 		double[] instanceX_beingInClass90Plus_Test = new double[numOfDimension];
 		double[] instanceX_beingInClass90Minus_Test = new double[numOfDimension];
 		largest_TestPredicted = new double[numOfPointsTest_F];
-				
+//double[][][] prb_zero90Plus_Tr_table_K, double[][][] prb_zero90Minus_Tr_table_K, double[][][] prb_one90Plus_Tr_table_K, double[][][] prb_one90Minus_Tr_table_K, int nfolds				
 		for (int i = 0; i < numOfPointsTest_F; i++) {
 			double multiX_beingInClass90Plus_Test = 0;
 			double multiX_beingInClass90Minus_Test = 0;
 			for (int j = 0; j < numOfDimension; j++) {
 				if(datasetTest_F[i][j] == 0){
-					instanceX_beingInClass90Plus_Test[j] = prb_zero90Plus[j];
+//					instanceX_beingInClass90Plus_Test[j] = prb_zero90Plus_Tr_table_K[nfolds][][j];
 					instanceX_beingInClass90Minus_Test[j] = prb_zero90Minus[j];
 				}				
 				else if (datasetTest_F[i][j] == 1) {
@@ -413,12 +426,77 @@ public class Naive_Bayes {
 	}	
 	
 	
-	//8. P(H|X) = P(X|H)*P(H). find probability of instance X being in class H
+	//9. P(H|X) = P(X|H)*P(H). find probability of instance X being in class H
 //	findProbabilityInstanceX_beingInClassH_Test(){
 //		
 //	}
 	
 	
+	//8. find pointsTest which are the nearest to a centroid
+	private int nearest(double[] datasetRecordsTest) {
+		//calculate the distance to centroid 0.
+		double minDistance = distance(datasetRecordsTest, centroids[0]);
+		int pointIndex = 0;
+			
+		for (int i = 1; i < numOfClusters; i++) {
+			//calculate the distance to centroid i.
+			double minDistance2 = distance(datasetRecordsTest, centroids[i]);
+			//find minimal distances
+			if (minDistance2 < minDistance) {
+				minDistance = minDistance2;
+				pointIndex = i;
+			}
+		}
+		return pointIndex;
+	}
+	
+	
+	
+	/*********** Distances (Jaccard, Simple matching coefficient (SMC)) ***********/	
+	//Jaccard
+	private double distance(double[] vectors1, double[] vectors2) {
+		double Jaccard = 0;
+		double M01 = 0, M10 = 0, M11 = 0;
+		for (int i = 0; i < numOfDimension; i++) {
+			if((vectors1[i] == 0) && (vectors2[i] == 1)){
+				M01++;
+			}
+			if((vectors1[i] == 1) && (vectors2[i] == 0)){
+				M10++;
+			}
+			if((vectors1[i] == 1) && (vectors2[i] == 1)){
+				M11++;
+			}
+	}
+		Jaccard += (M01+M10)/(M01+M10+M11);
+		return Jaccard;
+	}
+	
+	
+//	//Simple matching coefficient (SMC)
+//	private double distance(double[] vectors1, double[] vectors2) {
+//		double SMC = 0;
+//		double M00 = 0, M01 = 0, M10 = 0, M11 = 0;
+//		for (int i = 0; i < numOfDimension; i++) {
+//			if(vectors1[i] == 0 && vectors2[i] == 0){
+//				M00++;
+//			}
+//			if(vectors1[i] == 0 && vectors2[i] == 1){
+//				M01++;
+//			}
+//			if(vectors1[i] == 1 && vectors2[i] == 0){
+//				M10++;
+//			}
+//			if(vectors1[i] == 1 && vectors2[i] == 1){
+//				M11++;
+//			}
+//	}
+//		SMC += (M00+M11)/(M00+M01+M10+M11);
+//		return SMC;
+//	}	
+/*********** END Distances ***********/	
+		
+		
 	
 	private double[] convertTrueGrade_Test_To90and89(int numOfPointsTest_F, double[] trueGradeTest_F) {
 		double[] trueGrade90and89_F = new double[numOfPoints];
@@ -465,7 +543,7 @@ public class Naive_Bayes {
 	private double findAccuracyTest() {
 		double AccuracyTest_F = 0;
 		AccuracyTest_F = (TP + TN)/(TP + TN + FP + FN);	
-		System.out.println("Accuracy of testing dataset: " + AccuracyTest_F*100 +"%");
+		System.out.println("TESTING Accuracy: " + AccuracyTest_F*100 +"%");
 		System.out.println("STOP");
 		return AccuracyTest_F;
 	}
