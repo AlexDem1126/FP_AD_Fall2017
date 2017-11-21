@@ -377,7 +377,7 @@ public class Naive_Bayes {
 	 * @param nfolds 
 	 * @param ds ***********/
 	//******************************************************************		
-	public void Naive_Bayes_Test(int k, double[][] centroids_F, double[][] datasetTest_F, double[] trueGradeTest_F, int numOfPointsTest_F, double[][][] prb_zero90Plus_Tr_table_K, double[][][] prb_zero90Minus_Tr_table_K, double[][][] prb_one90Plus_Tr_table_K, double[][][] prb_one90Minus_Tr_table_K, int nfolds) {
+	public void Naive_Bayes_Test(int k, double[][] centroids_F, double[][] datasetTest_F, double[] trueGradeTest_F, int numOfPointsTest_F, double[][] prb_zero90Plus_Tr_table_K, double[][] prb_zero90Minus_Tr_table_K, double[][] prb_one90Plus_Tr_table_K, double[][] prb_one90Minus_Tr_table_K) {
 		centroids = centroids_F;
 		numOfClusters = k;
 		
@@ -398,19 +398,20 @@ public class Naive_Bayes {
 		
 		double[] instanceX_beingInClass90Plus_Test = new double[numOfDimension];
 		double[] instanceX_beingInClass90Minus_Test = new double[numOfDimension];
-		largest_TestPredicted = new double[numOfPointsTest_F];
-//double[][][] prb_zero90Plus_Tr_table_K, double[][][] prb_zero90Minus_Tr_table_K, double[][][] prb_one90Plus_Tr_table_K, double[][][] prb_one90Minus_Tr_table_K, int nfolds				
+		largest_TestPredicted = new double[numOfPointsTest_F];				
 		for (int i = 0; i < numOfPointsTest_F; i++) {
+			int cluster = pointTest[i];
+			
 			double multiX_beingInClass90Plus_Test = 0;
 			double multiX_beingInClass90Minus_Test = 0;
 			for (int j = 0; j < numOfDimension; j++) {
 				if(datasetTest_F[i][j] == 0){
-//					instanceX_beingInClass90Plus_Test[j] = prb_zero90Plus_Tr_table_K[nfolds][][j];
-					instanceX_beingInClass90Minus_Test[j] = prb_zero90Minus[j];
+					instanceX_beingInClass90Plus_Test[j] = prb_zero90Plus_Tr_table_K[cluster][j];
+					instanceX_beingInClass90Minus_Test[j] = prb_zero90Minus_Tr_table_K[cluster][j];
 				}				
 				else if (datasetTest_F[i][j] == 1) {
-					instanceX_beingInClass90Plus_Test[j] = prb_one90Plus[j];
-					instanceX_beingInClass90Minus_Test[j] = prb_one90Minus[j];
+					instanceX_beingInClass90Plus_Test[j] = prb_one90Plus_Tr_table_K[cluster][j];
+					instanceX_beingInClass90Minus_Test[j] = prb_one90Minus_Tr_table_K[cluster][j];
 				}
 				else {
 					System.out.println("ERROR_3: value of attribute ["+i+"]["+j+"] is not equal to 0 or 1.");
@@ -499,7 +500,7 @@ public class Naive_Bayes {
 		
 	
 	private double[] convertTrueGrade_Test_To90and89(int numOfPointsTest_F, double[] trueGradeTest_F) {
-		double[] trueGrade90and89_F = new double[numOfPoints];
+		double[] trueGrade90and89_F = new double[numOfPointsTest_F];
 		for (int i = 0; i < numOfPointsTest_F; i++) {			
 			if(trueGradeTest_F[i] >= 90){
 				trueGrade90and89_F[i] = 90;
