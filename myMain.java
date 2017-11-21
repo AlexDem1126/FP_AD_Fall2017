@@ -18,38 +18,7 @@ public class myMain {
 				
 				
 				//N-fold cross validation
-				int numOfFolds = 5;								
-				
-
-				double[][] prb_zero90Plus_Tr_table = new double[numOfFolds][]; //zero90Plus training table for whole dataset
-				double[][] prb_zero90Minus_Tr_table = new double[numOfFolds][];// zero90Minus training table for whole dataset
-				double[][] prb_one90Plus_Tr_table = new double[numOfFolds][]; //one90Plus training table for whole dataset
-				double[][] prb_one90Minus_Tr_table = new double[numOfFolds][]; //one90Minus training table for whole dataset
-				
-				for (int i = 0; i < numOfFolds; i++) {					
-					prb_zero90Plus_Tr_table[i] = new double[305]; //305- is NumOfDimension
-					prb_zero90Minus_Tr_table[i] = new double[305];
-					prb_one90Plus_Tr_table[i] = new double[305];
-					prb_one90Minus_Tr_table[i] = new double[305];
-				}
-				
-				
-				double[][][] prb_zero90Plus_Tr_table_K = new double[numOfFolds][][]; //zero90Plus training table for cluster K
-				double[][][] prb_zero90Minus_Tr_table_K = new double[numOfFolds][][];// zero90Minus training table for cluster K
-				double[][][] prb_one90Plus_Tr_table_K = new double[numOfFolds][][]; //one90Plus training table for cluster K
-				double[][][] prb_one90Minus_Tr_table_K = new double[numOfFolds][][]; //one90Minus training table for cluster K
-				
-				for (int i = 0; i < numOfFolds; i++) {					
-					prb_zero90Plus_Tr_table_K[i] = new double[number_of_clusters][305]; //305- is NumOfDimension
-					prb_zero90Minus_Tr_table_K[i] = new double[number_of_clusters][305];
-					prb_one90Plus_Tr_table_K[i] = new double[number_of_clusters][305];
-					prb_one90Minus_Tr_table_K[i] = new double[number_of_clusters][305];
-				}
-
-				
-				
-				
-				
+				int numOfFolds = 5;				
 				for (int nfolds = 0; nfolds < numOfFolds; nfolds++) {					
 					
 					String F = file; 					// F is a file name
@@ -63,8 +32,7 @@ public class myMain {
 					System.out.println("##### "+ nfolds + " - fold cross validation #####");
 					System.out.println("******************************************************************");
 					
-					//get data from the file.
-//					manageFile_A objMF = new manageFile_A(F);
+					//get data from the file
 					manageFile_A objMF = new manageFile_A(F, nfolds);
 					
 //					String tr = "Training data set";
@@ -127,14 +95,19 @@ public class myMain {
 					//******************************************************************
 					/*********** Naive Bayes Classifier (NB) WITHOUT K-MEANS ***********/
 					//******************************************************************
+					double[] prb_zero90Plus_Tr_table = new double[objMF.getNumOfDimension()]; //zero90Plus training table for whole dataset
+					double[] prb_zero90Minus_Tr_table = new double[objMF.getNumOfDimension()];// zero90Minus training table for whole dataset
+					double[] prb_one90Plus_Tr_table = new double[objMF.getNumOfDimension()]; //one90Plus training table for whole dataset
+					double[] prb_one90Minus_Tr_table = new double[objMF.getNumOfDimension()]; //one90Minus training table for whole dataset
+					
 					System.out.println("\n***** Naive Bayes Classifier (NB) WITHOUT K-MEANS *****");
 					Naive_Bayes_without_Kmeans objNB_wk = new Naive_Bayes_without_Kmeans(objMF.getTrueGrade(), objMF.getDataset(), objMF.getNumOfPoints(), objMF.getNumOfDimension());
 					objNB_wk.Naive_Bayes_Test(objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest());
 					
-					prb_zero90Plus_Tr_table[nfolds] = objNB_wk.getPrb_zero90Plus();
-					prb_zero90Minus_Tr_table[nfolds] = objNB_wk.getPrb_zero90Minus();
-					prb_one90Plus_Tr_table[nfolds] = objNB_wk.getPrb_one90Plus();
-					prb_one90Minus_Tr_table[nfolds] = objNB_wk.getPrb_one90Minus();
+					prb_zero90Plus_Tr_table = objNB_wk.getPrb_zero90Plus();
+					prb_zero90Minus_Tr_table = objNB_wk.getPrb_zero90Minus();
+					prb_one90Plus_Tr_table = objNB_wk.getPrb_one90Plus();
+					prb_one90Minus_Tr_table = objNB_wk.getPrb_one90Minus();
 					
 					/*********** END Naive Bayes Classifier (NB) WITHOUT K-MEANS***********/
 					
@@ -186,28 +159,40 @@ public class myMain {
 					//******************************************************************
 					System.out.println("\n***** Naive Bayes Classifier (NB) *****");
 					int numOfPoints =  objMF.getNumOfPoints();
-					displayUpdatedPoints(point_K[sse_K_SMALL_index], numOfPoints);
+//					displayUpdatedPoints(point_K[sse_K_SMALL_index], numOfPoints);
 					
 					int[] clustersSize = clusterSize_K[sse_K_SMALL_index];
 					displayClustersSize(clusterSize_K[sse_K_SMALL_index], K);
 					
+					double[][] prb_zero90Plus_Tr_table_K = new double[K][]; //zero90Plus training table for cluster K
+					double[][] prb_zero90Minus_Tr_table_K = new double[K][];// zero90Minus training table for cluster K
+					double[][] prb_one90Plus_Tr_table_K = new double[K][]; //one90Plus training table for cluster K
+					double[][] prb_one90Minus_Tr_table_K = new double[K][]; //one90Minus training table for cluster K
+					
+					for (int i = 0; i < K; i++) {					
+						prb_zero90Plus_Tr_table_K[i] = new double[objMF.getNumOfDimension()];
+						prb_zero90Minus_Tr_table_K[i] = new double[objMF.getNumOfDimension()];
+						prb_one90Plus_Tr_table_K[i] = new double[objMF.getNumOfDimension()];
+						prb_one90Minus_Tr_table_K[i] = new double[objMF.getNumOfDimension()];
+					}
+					
 					Naive_Bayes objNB = null;
 					int K_NB = K;
-					int count_clusters = 0;
+					int count_clusters = 0;					
 					while(K_NB > 0){
 						objNB = new Naive_Bayes(count_clusters, point_K[sse_K_SMALL_index], clusterSize_K[sse_K_SMALL_index], objMF.getTrueGrade(), objMF.getDataset(), objMF.getNumOfPoints(), objMF.getNumOfDimension());
 						
-						prb_zero90Plus_Tr_table_K[nfolds][count_clusters] = objNB.getPrb_zero90Plus();
-						prb_zero90Minus_Tr_table_K[nfolds][count_clusters] = objNB.getPrb_zero90Minus();
-						prb_one90Plus_Tr_table_K[nfolds][count_clusters] = objNB.getPrb_one90Plus();
-						prb_one90Minus_Tr_table_K[nfolds][count_clusters] = objNB.getPrb_one90Minus();
+						prb_zero90Plus_Tr_table_K[count_clusters] = objNB.getPrb_zero90Plus();
+						prb_zero90Minus_Tr_table_K[count_clusters] = objNB.getPrb_zero90Minus();
+						prb_one90Plus_Tr_table_K[count_clusters] = objNB.getPrb_one90Plus();
+						prb_one90Minus_Tr_table_K[count_clusters] = objNB.getPrb_one90Minus();
 						
 						K_NB--;
 						count_clusters++;						
 					}
 
 					
-					objNB.Naive_Bayes_Test(K, centroids_K[sse_K_SMALL_index], objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest(), prb_zero90Plus_Tr_table_K, prb_zero90Minus_Tr_table_K, prb_one90Plus_Tr_table_K, prb_one90Minus_Tr_table_K, nfolds);
+					objNB.Naive_Bayes_Test(K, centroids_K[sse_K_SMALL_index], objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest(), prb_zero90Plus_Tr_table_K, prb_zero90Minus_Tr_table_K, prb_one90Plus_Tr_table_K, prb_one90Minus_Tr_table_K);
 					
 					/*********** END Naive Bayes Classifier (NB) ***********/
 					
