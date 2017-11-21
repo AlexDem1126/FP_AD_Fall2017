@@ -192,7 +192,7 @@ public class myMain {
 					}
 
 					
-					objNB.Naive_Bayes_Test(K, centroids_K[sse_K_SMALL_index], objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest(), prb_zero90Plus_Tr_table_K, prb_zero90Minus_Tr_table_K, prb_one90Plus_Tr_table_K, prb_one90Minus_Tr_table_K);
+					objNB.Naive_Bayes_Test(K, centroids_K[sse_K_SMALL_index], objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest(), prb_zero90Plus_Tr_table_K, prb_zero90Minus_Tr_table_K, prb_one90Plus_Tr_table_K, prb_one90Minus_Tr_table_K, prb_zero90Plus_Tr_table, prb_zero90Minus_Tr_table, prb_one90Plus_Tr_table, prb_one90Minus_Tr_table);					
 					
 					/*********** END Naive Bayes Classifier (NB) ***********/
 					
