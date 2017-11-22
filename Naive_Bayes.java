@@ -50,6 +50,7 @@ public class Naive_Bayes {
 	private double[] prb_one90Minus_Tr_table;
 	private double[] largest_TestPredicted_whole;
 	private double accuracy_Test_Whole;
+	private double average_accuracy_Test;
 	
 	
 
@@ -436,6 +437,11 @@ public class Naive_Bayes {
 			
 			//14. find Accuracy
 			accuracy_Test_Whole = findAccuracyTest_Whole();
+			
+			average_accuracy_Test = accuracy_Test_Whole;
+		}
+		else{
+			average_accuracy_Test = accuracy_Test;
 		}
 	}	
 	
