@@ -447,6 +447,15 @@ public class Naive_Bayes {
 	
 	
 	
+	public double getAverage_accuracy_Test() {
+		return average_accuracy_Test;
+	}
+	public void setAverage_accuracy_Test(double average_accuracy_Test) {
+		this.average_accuracy_Test = average_accuracy_Test;
+	}
+	
+	
+	
 	private double[] convertActualTrueGradeTo90and89Test(double[] trueGradeTest_F) {
 		double[] trueGrade90and89_Test_F = new double[numOfPointsTest];	
 		for (int i = 0; i < numOfPointsTest; i++) {	
