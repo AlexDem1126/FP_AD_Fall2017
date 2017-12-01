@@ -26,8 +26,8 @@ public class Naive_Bayes_without_Kmeans {
 	private double FP;	//FP is False Positive 
 	private double FN;	//FN is False Negative 
 	private double TN;	//TN is True Negative 
-	private double accuracyTraining;
-	private double accuracy_Test;
+	private double accuracyTraining_wk;
+	private double accuracy_Test_wk;
 	private int ls = 2; //Laplace smoothing number
 	private int[] numOfPossibleValuesX;
 	private int num_clusters;
@@ -70,6 +70,15 @@ public class Naive_Bayes_without_Kmeans {
 	}
 	
 	
+	public double getAccuracyTraining_wk() {
+		return accuracyTraining_wk;
+	}
+	public void setAccuracyTraining_wk(double accuracyTraining_wk) {
+		this.accuracyTraining_wk = accuracyTraining_wk;
+	}
+	
+	
+	
 	//******************************************************************
 	/*********** Training Naive Bayes Classifier ***********/
 	//******************************************************************
@@ -99,7 +108,7 @@ public class Naive_Bayes_without_Kmeans {
 		countTP_FP_FN_TN();
 		
 		//7. find Accuracy
-		accuracyTraining = findAccuracyTraining();		
+		accuracyTraining_wk = findAccuracyTraining();		
 	}
 	
 
@@ -368,7 +377,7 @@ public class Naive_Bayes_without_Kmeans {
 		}
 		trueGrade_Test_90and89 = convertTrueGrade_Test_To90and89(numOfPointsTest_F, trueGradeTest_F);
 		countTP_FP_FN_TN_Test(numOfPointsTest_F);
-		accuracy_Test = findAccuracyTest();		
+		accuracy_Test_wk = findAccuracyTest();		
 	}	
 	
 	

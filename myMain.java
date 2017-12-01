@@ -18,7 +18,9 @@ public class myMain {
 				
 				
 				//N-fold cross validation
-				int numOfFolds = 5;				
+				int numOfFolds = 5;								
+				double[] find_accuracy_for_fold_Test = new double[numOfFolds];
+				double find_Average_accuracy_Test = 0;
 				for (int nfolds = 0; nfolds < numOfFolds; nfolds++) {					
 					
 					String F = file; 					// F is a file name
@@ -33,7 +35,7 @@ public class myMain {
 					System.out.println("******************************************************************");
 					
 					//get data from the file
-					manageFile_A objMF = new manageFile_A(F, nfolds);
+					manageFile_A objMF = new manageFile_A(F, nfolds, numOfFolds);
 					
 //					String tr = "Training data set";
 //					String ts = "Testing data set";					
@@ -101,13 +103,17 @@ public class myMain {
 					double[] prb_one90Minus_Tr_table = new double[objMF.getNumOfDimension()]; //one90Minus training table for whole dataset
 					
 					System.out.println("\n***** Naive Bayes Classifier (NB) WITHOUT K-MEANS *****");
-					Naive_Bayes_without_Kmeans objNB_wk = new Naive_Bayes_without_Kmeans(objMF.getTrueGrade(), objMF.getDataset(), objMF.getNumOfPoints(), objMF.getNumOfDimension());
+					Naive_Bayes_without_Kmeans objNB_wk = new Naive_Bayes_without_Kmeans(objMF.getTrueGrade(), objMF.getDataset(),
+																						objMF.getNumOfPoints(), objMF.getNumOfDimension());
 					objNB_wk.Naive_Bayes_Test(objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest());
 					
 					prb_zero90Plus_Tr_table = objNB_wk.getPrb_zero90Plus();
 					prb_zero90Minus_Tr_table = objNB_wk.getPrb_zero90Minus();
 					prb_one90Plus_Tr_table = objNB_wk.getPrb_one90Plus();
 					prb_one90Minus_Tr_table = objNB_wk.getPrb_one90Minus();
+					
+					double accuracyTraining_wk = 0;
+					accuracyTraining_wk = objNB_wk.getAccuracyTraining_wk();
 					
 					/*********** END Naive Bayes Classifier (NB) WITHOUT K-MEANS***********/
 					
@@ -178,10 +184,16 @@ public class myMain {
 					
 					Naive_Bayes objNB = null;
 					int K_NB = K;
-					int count_clusters = 0;					
+					int count_clusters = 0;		
+					double[] accuracyTraining_k = new double[K];
+					for (int i = 0; i < K; i++) {
+						accuracyTraining_k[i] = 0;						
+					}
 					while(K_NB > 0){
-						objNB = new Naive_Bayes(count_clusters, point_K[sse_K_SMALL_index], clusterSize_K[sse_K_SMALL_index], objMF.getTrueGrade(), objMF.getDataset(), objMF.getNumOfPoints(), objMF.getNumOfDimension());
+						objNB = new Naive_Bayes(count_clusters, point_K[sse_K_SMALL_index], clusterSize_K[sse_K_SMALL_index], objMF.getTrueGrade(),
+												objMF.getDataset(), objMF.getNumOfPoints(), objMF.getNumOfDimension());
 						
+						accuracyTraining_k[count_clusters] = objNB.getAccuracyTraining();
 						prb_zero90Plus_Tr_table_K[count_clusters] = objNB.getPrb_zero90Plus();
 						prb_zero90Minus_Tr_table_K[count_clusters] = objNB.getPrb_zero90Minus();
 						prb_one90Plus_Tr_table_K[count_clusters] = objNB.getPrb_one90Plus();
@@ -192,8 +204,13 @@ public class myMain {
 					}
 
 					
-					objNB.Naive_Bayes_Test(K, centroids_K[sse_K_SMALL_index], objMF.getDatasetTest(), objMF.getTrueGradeTest(), objMF.getNumOfPointsTest(), prb_zero90Plus_Tr_table_K, prb_zero90Minus_Tr_table_K, prb_one90Plus_Tr_table_K, prb_one90Minus_Tr_table_K, prb_zero90Plus_Tr_table, prb_zero90Minus_Tr_table, prb_one90Plus_Tr_table, prb_one90Minus_Tr_table);					
+					objNB.Naive_Bayes_Test(K, centroids_K[sse_K_SMALL_index], objMF.getDatasetTest(), objMF.getTrueGradeTest(), 
+											objMF.getNumOfPointsTest(), prb_zero90Plus_Tr_table_K, prb_zero90Minus_Tr_table_K, 
+											prb_one90Plus_Tr_table_K, prb_one90Minus_Tr_table_K, prb_zero90Plus_Tr_table, 
+											prb_zero90Minus_Tr_table, prb_one90Plus_Tr_table, prb_one90Minus_Tr_table, accuracyTraining_wk, accuracyTraining_k);					
 					
+					find_accuracy_for_fold_Test[nfolds] = objNB.getAverage_accuracy_Test();					
+					find_Average_accuracy_Test += find_accuracy_for_fold_Test[nfolds];
 					/*********** END Naive Bayes Classifier (NB) ***********/
 					
 //					String tr = "Training data set";
@@ -204,7 +221,9 @@ public class myMain {
 					
 					
 										
-				}//End N-fold cross validation		
+				}//End N-fold cross validation	
+				
+				System.out.println("\nTESTING Average Accuracy:" + find_Average_accuracy_Test/numOfFolds*100 +"%");
 
 								
 				

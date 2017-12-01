@@ -39,6 +39,9 @@ public class Naive_Bayes {
 	private double[] trueGradeTest;
 	private int numOfPointsTest;
 	
+	private double accuracyTraining_wk;
+	private double[] accuracyTraining_k;
+	
 	private double[][] prb_zero90Minus_Tr_table_K;
 	private double[][] prb_zero90Plus_Tr_table_K;
 	private double[][] prb_one90Plus_Tr_table_K;
@@ -51,6 +54,7 @@ public class Naive_Bayes {
 	private double[] largest_TestPredicted_whole;
 	private double accuracy_Test_Whole;
 	private double average_accuracy_Test;
+
 	
 	
 
@@ -87,6 +91,15 @@ public class Naive_Bayes {
 	}
 	public void setPrb_one90Minus(double[] prb_one90Minus) {
 		this.prb_one90Minus = prb_one90Minus;
+	}
+	
+	
+	
+	public double getAccuracyTraining() {
+		return accuracyTraining;
+	}
+	public void setAccuracyTraining(double accuracyTraining) {
+		this.accuracyTraining = accuracyTraining;
 	}
 	
 	
@@ -384,6 +397,8 @@ public class Naive_Bayes {
 	//******************************************************************
 	/*********** Test Naive Bayes Classifier 
 	 * @param k 
+	 * @param accuracyTraining_wk_F 
+	 * @param accuracyTraining_k2_F 
 	 * @param prb_one90Minus_Tr_table 
 	 * @param prb_one90Plus_Tr_table 
 	 * @param prb_zero90Minus_Tr_table 
@@ -395,7 +410,10 @@ public class Naive_Bayes {
 	 * @param nfolds 
 	 * @param ds ***********/
 	//******************************************************************		
-	public void Naive_Bayes_Test(int k, double[][] centroids_F, double[][] datasetTest_F, double[] trueGradeTest_F, int numOfPointsTest_F, double[][] prb_zero90Plus_Tr_table_KF, double[][] prb_zero90Minus_Tr_table_KF, double[][] prb_one90Plus_Tr_table_KF, double[][] prb_one90Minus_Tr_table_KF, double[] prb_zero90Plus_Tr_table_F, double[] prb_zero90Minus_Tr_table_F, double[] prb_one90Plus_Tr_table_F, double[] prb_one90Minus_Tr_table_F) {
+	public void Naive_Bayes_Test(int k, double[][] centroids_F, double[][] datasetTest_F, double[] trueGradeTest_F, int numOfPointsTest_F,
+			double[][] prb_zero90Plus_Tr_table_KF, double[][] prb_zero90Minus_Tr_table_KF, double[][] prb_one90Plus_Tr_table_KF, 
+			double[][] prb_one90Minus_Tr_table_KF, double[] prb_zero90Plus_Tr_table_F, double[] prb_zero90Minus_Tr_table_F, 
+			double[] prb_one90Plus_Tr_table_F, double[] prb_one90Minus_Tr_table_F, double accuracyTraining_wk_F, double[] accuracyTraining_k2_F) {
 		numOfClusters = k;
 		centroids = centroids_F;
 		datasetTest = datasetTest_F;
@@ -409,6 +427,9 @@ public class Naive_Bayes {
 		prb_zero90Minus_Tr_table = prb_zero90Minus_Tr_table_F;
 		prb_one90Plus_Tr_table = prb_one90Plus_Tr_table_F;
 		prb_one90Minus_Tr_table = prb_one90Minus_Tr_table_F;
+		
+		accuracyTraining_wk = accuracyTraining_wk_F;
+		accuracyTraining_k = accuracyTraining_k2_F;
 		
 		
 		trueGradeTest = convertActualTrueGradeTo90and89Test(trueGradeTest_F);
@@ -562,7 +583,7 @@ public class Naive_Bayes {
 					instanceX_beingInClass90Minus_Test[j] = prb_one90Minus_Tr_table_K[cluster][j];
 				}
 				else {
-					System.out.println("ERROR_3: value of attribute ["+i+"]["+j+"] is not equal to 0 or 1.");
+					System.out.println("ERROR_5: value of attribute ["+i+"]["+j+"] is not equal to 0 or 1.");
 				}
 			}
 			multiX_beingInClass90Plus_Test = findMultiX_beingInClass90Plus(instanceX_beingInClass90Plus_Test);
@@ -602,7 +623,7 @@ public class Naive_Bayes {
 				TN++; //Prediction was negative -1, but in reality the value was -1
 			}
 			else{
-				System.out.println("ERROR_5: Testing data - TP, FP,FN, TN.");
+				System.out.println("ERROR_6: Testing data - TP, FP,FN, TN.");
 			}
 		}	
 		System.out.println("TESTING: TP= "+TP + ", FP= "+FP + ", FN= "+FN + ", TN= " + TN);
@@ -645,7 +666,7 @@ public class Naive_Bayes {
 					instanceX_beingInClass90Minus_Test[j] = prb_one90Minus_Tr_table[j];
 				}
 				else {
-					System.out.println("ERROR_3: value of attribute ["+i+"]["+j+"] is not equal to 0 or 1.");
+					System.out.println("ERROR_7: value of attribute ["+i+"]["+j+"] is not equal to 0 or 1.");
 				}
 			}
 			multiX_beingInClass90Plus_Test = findMultiX_beingInClass90Plus(instanceX_beingInClass90Plus_Test);
@@ -685,7 +706,7 @@ public class Naive_Bayes {
 					TN++; //Prediction was negative -1, but in reality the value was -1
 				}
 				else{
-					System.out.println("ERROR_5: Testing data - TP, FP,FN, TN.");
+					System.out.println("ERROR_8: Testing data - TP, FP,FN, TN.");
 				}
 			}	
 			System.out.println("TESTING (Whole): TP= "+TP + ", FP= "+FP + ", FN= "+FN + ", TN= " + TN);

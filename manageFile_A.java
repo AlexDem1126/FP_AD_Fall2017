@@ -25,6 +25,7 @@ public class manageFile_A {
 	private double[] trueGradeMF;
 	private double[] trueGradeTestMF;
 	private int foldNumberMF;
+	private int numOfFolds;
 			
 	
 				
@@ -117,9 +118,10 @@ public class manageFile_A {
 	
 	
 	
-public manageFile_A(String fileName2, int numOfFolds2) {
+public manageFile_A(String fileName2, int nfolds2, int numOfFolds2) {
 	fileNameMF = fileName2;
-	foldNumberMF = numOfFolds2; 
+	foldNumberMF = nfolds2; 
+	numOfFolds = numOfFolds2;
 	int instanceIndex_A = 0;
 	BufferedReader br;
 	ArrayList<String> fileData_L_temp;
@@ -134,7 +136,7 @@ public manageFile_A(String fileName2, int numOfFolds2) {
             while ((line = br.readLine()) != null) {
             	String[] line_temp = line.split(",");            	
             	numOfColumns = line_temp.length;
-            	if(instanceIndex_A % 5 == foldNumberMF){
+            	if(instanceIndex_A % numOfFolds == foldNumberMF){
             		numOfRows_test++;
             	}
             	else{
@@ -196,7 +198,7 @@ public manageFile_A(String fileName2, int numOfFolds2) {
                     		i2++;                    		                    		
                     	}
                     	
-                    	if(instanceIndex_B % 5 == foldNumberMF){
+                    	if(instanceIndex_B % numOfFolds == foldNumberMF){
                     		wineNameTestMF[nrowTest] = line_temp2[0];
                     		datasetTestMF[nrowTest] = line2;  
                         	vintageTestMF[nrowTest] = Integer.parseInt(line_temp2[numOfColumns-2]); 
