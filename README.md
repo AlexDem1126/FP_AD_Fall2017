@@ -16,8 +16,8 @@ In this research, I am going to integrate three data mining methods: Calinski-Ha
    - 4.1. Take testing item, and calculate the distance between it and centroids that were obtained in step 2.2.
    - 4.2. Choose centroid which has the smallest distance to the tested item.
    - 4.3. Check, if chosen centroid has highest training accuracy.
-   - 4.3.1. If it does, then use probability P(X|H) from step 2.4 for further calculations.
-   - 4.3.2. If it does not, then use probability P(X|H) from step 2.3 for further calculations.
+        - 4.3.1. If it does, then use probability P(X|H) from step 2.4 for further calculations.
+        - 4.3.2. If it does not, then use probability P(X|H) from step 2.3 for further calculations.
    - 4.4. Get accuracy of prediction for fold 1.
    - 4.5. Repeat steps (5,6,7,8) for each fold (fold 2, fold 3, fold 4, fold 5).
 
