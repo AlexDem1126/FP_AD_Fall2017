@@ -28,7 +28,7 @@ In this research, I am going to integrate three data mining methods: Calinski-Ha
   - Number of Attributes: 305
   - Associated Tasks: Classification
   
-  Instance # | Attribute 1 | Attribute 2 | ... | Attribute 305 | Class
+  Instance #  | Attribute 1 | Attribute 2 | ... | Attribute 305 | Class
   ----------- ------------- ------------- ----- --------------- ------
   Instance 1 | 0           | 1           | ... | 1             | 90+
   Instance 2 | 0           | 1           | ... | 0             | 90+
@@ -37,7 +37,7 @@ In this research, I am going to integrate three data mining methods: Calinski-Ha
   Instance 4 | 1           | 0           | ... | 0             | 90-
   
   
-First Header  | Second Header  | Second Header
+First Header  | Second Header | Second Header
 ------------- | ------------- | -------------
 Content Cell  | Content Cell  | Content Cell
 Content Cell  | Content Cell  | Content Cell
