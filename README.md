@@ -24,4 +24,8 @@ In this research, I am going to integrate three data mining methods: Calinski-Ha
 
 ###### Data Set Description:
   binary dataset
+  -Number of Instances: 1010
+  -Number of Attributes: 305
+  - Associated Tasks: Classification
+  
 
