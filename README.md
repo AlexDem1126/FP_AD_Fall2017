@@ -37,8 +37,9 @@ In this research, I am going to integrate three data mining methods: Calinski-Ha
   Instance 4 | 1           | 0           | ... | 0             | 90-
   
   
-First Header  | Second Header
-------------- | -------------
-Content Cell  | Content Cell
-Content Cell  | Content Cell
+First Header  | Second Header  | Second Header
+------------- | ------------- | -------------
+Content Cell  | Content Cell  | Content Cell
+Content Cell  | Content Cell  | Content Cell
+
 
