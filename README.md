@@ -33,7 +33,7 @@ Instance #  | Attribute 1 | Attribute 2 | ... | Attribute 305 | Class
 Instance 1  | 0  | 1  | ...  | 1  | 90+
 Instance 2  | 0  | 1  | ...  | 0  | 90+
 ...  | ...  | ...  | ...  | ...  | ...
-Instance 3  | 0  | 0  | ...  | 1  | 90-
-Instance 4  | 1  | 0  | ...  | 0  | 90-
+Instance 1009  | 0  | 0  | ...  | 1  | 90-
+Instance 1010  | 1  | 0  | ...  | 0  | 90-
 
 
