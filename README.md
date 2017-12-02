@@ -26,23 +26,14 @@ In this research, I am going to integrate three data mining methods: Calinski-Ha
   binary dataset
   - Number of Instances: 1010
   - Number of Attributes: 305
-  - Associated Tasks: Classification
-  
-  Instance #  | Attribute 1 | Attribute 2 | ... | Attribute 305 | Class
-  ----------- ------------- ------------- ----- --------------- ------
-  Instance 1 | 0           | 1           | ... | 1             | 90+
-  Instance 2 | 0           | 1           | ... | 0             | 90+
-  ...        | ...         | ...         | ... | ...           | ...
-  Instance 3 | 0           | 0           | ... | 1             | 90-
-  Instance 4 | 1           | 0           | ... | 0             | 90-
-  
+  - Associated Tasks: Classification  
   
 Instance #  | Attribute 1 | Attribute 2 | ... | Attribute 305 | Class
 ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell
-Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell
-Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell
-Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell
-Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell
+Instance 1  | 0  | 1  | ...  | 1  | 90+
+Instance 2  | 0  | 1  | ...  | 0  | 90+
+...  | ...  | ...  | ...  | ...  | ...
+Instance 3  | 0  | 0  | ...  | 1  | 90-
+Instance 4  | 1  | 0  | ...  | 0  | 90-
 
 
